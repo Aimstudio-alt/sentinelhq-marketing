@@ -1,0 +1,1045 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SentinelHQ — Health and safety software for golf clubs and care homes</title>
+  <meta name="description" content="Simple health and safety software for golf clubs and care homes. Record inspections, manage hazardous chemicals, report accidents, and stay ready for any inspector visit — without the paperwork." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --fg:    #0a1410;
+      --bg:    #ffffff;
+      --bg-2:  #f6f7f5;
+      --bg-3:  #ffffff;
+      --line:  rgba(10,20,16,.10);
+      --line-2:rgba(10,20,16,.06);
+      --muted: rgba(10,20,16,.62);
+      --soft:  rgba(10,20,16,.46);
+      --accent:#1f8a5b;
+      --acc-i: #ffffff;
+      --serif: Georgia,"Times New Roman",serif;
+      --sans:  "Inter",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+      --mono:  "JetBrains Mono","SFMono-Regular",ui-monospace,Menlo,monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      letter-spacing: -.01em;
+      overflow-x: hidden;
+    }
+
+    /* ── Layout ── */
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 56px; }
+    section { padding: 100px 0; border-top: 1px solid var(--line-2); }
+
+    /* ── Type ── */
+    h1,h2,h3 { font-weight: 600; letter-spacing: -.025em; margin: 0; }
+    .display { font-size: clamp(42px,6vw,76px); line-height: .98; letter-spacing: -.035em; font-weight: 600; }
+    .display em { font-style: italic; font-family: var(--serif); font-weight: 400; letter-spacing: -.02em; }
+    .h2 { font-size: clamp(30px,4vw,48px); line-height: 1.02; letter-spacing: -.03em; }
+    .h2 em { font-style: italic; font-family: var(--serif); font-weight: 400; }
+    .lead { font-size: 19px; line-height: 1.5; color: var(--muted); max-width: 640px; }
+    .body-t { font-size: 15.5px; line-height: 1.6; color: var(--muted); }
+    .micro { font-family: var(--mono); font-size: 12px; font-weight: 500; line-height: 1.4; letter-spacing: .04em; color: var(--soft); }
+
+    .eyebrow {
+      font-family: var(--mono); font-size: 11px; font-weight: 500;
+      line-height: 1; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--soft); display: inline-flex; align-items: center; gap: 10px;
+    }
+    .eyebrow::before {
+      content: ""; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px color-mix(in oklab,var(--accent) 22%,transparent);
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      height: 46px; padding: 0 22px; border-radius: 999px;
+      font-size: 14.5px; font-weight: 500; letter-spacing: -.005em;
+      border: 1px solid transparent; cursor: pointer; white-space: nowrap;
+      text-decoration: none;
+      transition: transform .15s, background .15s, color .15s, border-color .15s;
+    }
+    .btn-primary { background: var(--accent); color: var(--acc-i); }
+    .btn-primary:hover { transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+    .btn-ghost:hover { border-color: var(--fg); }
+    .arr { font-size: 16px; }
+
+    /* ── Nav ── */
+    .nav {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(14px);
+      background: color-mix(in oklab,var(--bg) 78%,transparent);
+      border-bottom: 1px solid var(--line-2);
+    }
+    .nav-row { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 26px; width: auto; }
+    .nav-links { display: flex; align-items: center; gap: 30px; font-size: 14px; color: var(--muted); }
+    .nav-links a { color: inherit; text-decoration: none; }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-cta { display: flex; align-items: center; gap: 12px; }
+
+    /* ── Hero ── */
+    .hero { padding: 96px 0 80px; border-top: 0; }
+    .hero-cta { display: flex; gap: 14px; margin-top: 36px; align-items: center; flex-wrap: wrap; }
+    .hero-meta {
+      font-family: var(--mono); font-size: 12.5px; font-weight: 500; letter-spacing: .04em;
+      color: var(--soft); margin-left: 4px;
+    }
+    .badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 12px; border-radius: 999px;
+      background: color-mix(in oklab,var(--fg) 6%,transparent);
+      border: 1px solid var(--line);
+      font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: .04em;
+      color: var(--muted);
+    }
+    .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+    /* Preview frame */
+    .preview {
+      margin-top: 64px;
+      background: var(--bg-2); border: 1px solid var(--line); border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px -30px rgba(0,0,0,.55), 0 0 0 1px var(--line-2);
+    }
+    .preview-bar {
+      display: flex; align-items: center; gap: 8px; padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in oklab,var(--bg-2) 92%,var(--fg) 8%);
+    }
+    .preview-bar .tl { width: 10px; height: 10px; border-radius: 50%; }
+    .preview-bar .url {
+      margin-left: 12px; font-family: var(--mono); font-size: 11.5px; font-weight: 500;
+      color: var(--soft); letter-spacing: .02em;
+      background: var(--bg); border: 1px solid var(--line);
+      padding: 6px 10px; border-radius: 6px; flex: 1; max-width: 360px;
+    }
+    .preview-bar .stamp { margin-left: auto; font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--soft); letter-spacing: .06em; }
+    .preview-vid { position: relative; aspect-ratio: 16/9; background: #000; }
+    .preview-vid img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    .preview-vid iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .play-btn {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(10,20,16,.15); border: none; cursor: pointer; padding: 0;
+      transition: background .2s;
+    }
+    .play-btn:hover { background: rgba(10,20,16,.08); }
+    .play-btn.gone { opacity: 0; pointer-events: none; }
+    .play-disc {
+      width: 80px; height: 80px; border-radius: 50%; background: #fff;
+      box-shadow: 0 6px 24px rgba(10,20,16,.25);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .2s;
+    }
+    .play-btn:hover .play-disc { transform: scale(1.06); }
+    .play-disc svg { width: 28px; height: 28px; fill: var(--fg); transform: translateX(2px); }
+
+    /* ── Logo cloud ── */
+    .cloud-wrap { padding: 56px 0; border-top: 1px solid var(--line-2); }
+    .cloud { display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; opacity: .9; }
+    .cloud-item { font-family: var(--serif); font-size: 17px; font-weight: 600; letter-spacing: -.01em; color: var(--soft); display: flex; align-items: center; gap: 8px; }
+    .cloud-item .gl { width: 16px; height: 16px; border-radius: 4px; background: color-mix(in oklab,var(--fg) 18%,transparent); flex-shrink: 0; }
+
+    /* ── Products (CareSentinel / ClubSentinel) ── */
+    .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 56px; }
+    .pcard {
+      border: 1px solid var(--line); border-radius: 18px; padding: 36px;
+      background: var(--bg-2); text-decoration: none; color: inherit; display: block;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .pcard:hover { border-color: rgba(10,20,16,.22); box-shadow: 0 8px 32px -8px rgba(10,20,16,.12); }
+    .pcard-chip { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--soft); margin-bottom: 16px; display: block; }
+    .pcard-name { font-size: 28px; font-weight: 600; letter-spacing: -.03em; margin-bottom: 10px; }
+    .pcard-desc { font-size: 15px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
+    .pcard-list { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+    .pcard-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--muted); line-height: 1.5; }
+    .pcard-list li::before { content: "✓"; color: var(--accent); font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .pcard-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--accent); }
+
+    /* ── Tech feature grid ── */
+    .feature-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 56px; }
+    .feature {
+      padding: 28px; border-radius: 18px;
+      background: var(--bg-2); border: 1px solid var(--line);
+      display: flex; flex-direction: column; gap: 14px; min-height: 240px;
+    }
+    .feature .ic {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: color-mix(in oklab,var(--accent) 18%,transparent);
+      border: 1px solid color-mix(in oklab,var(--accent) 30%,var(--line));
+      display: grid; place-items: center; color: var(--accent);
+      font-family: var(--mono); font-size: 15px; font-weight: 600;
+    }
+    .feature h3 { font-size: 18px; line-height: 1.2; letter-spacing: -.02em; }
+    .feature p { font-size: 14.5px; line-height: 1.55; color: var(--muted); margin: 0; }
+    .feature .more { margin-top: auto; font-size: 13px; font-weight: 500; color: var(--accent); display: inline-flex; gap: 6px; text-decoration: none; }
+
+    /* ── Deep-dive rows ── */
+    .feat-row { display: grid; grid-template-columns: 1fr 1.1fr; gap: 64px; align-items: center; padding: 56px 0; border-top: 1px dashed var(--line-2); }
+    .feat-row:first-child { border-top: 0; padding-top: 16px; }
+    .feat-row.flip { grid-template-columns: 1.1fr 1fr; }
+    .feat-row.flip .copy { order: 2; }
+    .feat-row .copy h3 { font-size: clamp(22px,2.5vw,32px); line-height: 1.05; letter-spacing: -.03em; max-width: 22ch; }
+    .feat-row .copy h3 em { font-style: italic; font-family: var(--serif); font-weight: 400; }
+    .feat-row .copy .lead { margin-top: 16px; }
+    .feat-row .copy .points { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; list-style: none; }
+    .feat-row .copy .points li { padding-left: 22px; position: relative; font-size: 14.5px; color: var(--muted); }
+    .feat-row .copy .points li::before {
+      content: ""; position: absolute; left: 0; top: 8px;
+      width: 10px; height: 10px; border-radius: 3px;
+      background: color-mix(in oklab,var(--accent) 30%,transparent);
+      border: 1px solid var(--accent);
+    }
+
+    /* Screenshot container */
+    .shot {
+      background: var(--bg-2); border: 1px solid var(--line); border-radius: 16px;
+      aspect-ratio: 4/3; position: relative; overflow: hidden;
+      background-image: repeating-linear-gradient(135deg,color-mix(in oklab,var(--fg) 4%,transparent) 0 1px,transparent 1px 14px);
+    }
+    .shot-label {
+      position: absolute; left: 16px; bottom: 14px;
+      font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .08em;
+      color: var(--soft); text-transform: uppercase;
+    }
+    .mock-ui {
+      position: absolute; inset: 24px; border: 1px solid var(--line); border-radius: 10px;
+      background: var(--bg-3); padding: 16px; display: flex; flex-direction: column; gap: 10px;
+      overflow: hidden;
+    }
+
+    /* Voice mock */
+    .voice-bars { display: flex; gap: 4px; align-items: flex-end; height: 60px; flex-shrink: 0; }
+    .vb { width: 4px; border-radius: 2px; background: color-mix(in oklab,var(--fg) 18%,transparent); }
+    .vb.a { background: var(--accent); }
+    .voice-items { border-top: 1px solid var(--line-2); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+    .vi { display: flex; gap: 10px; font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .vi-dot { flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-top: 4px; }
+
+    /* SDS mock */
+    .sds-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .sds-pdf { background: color-mix(in oklab,var(--fg) 4%,transparent); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+    .sds-rec { background: color-mix(in oklab,var(--accent) 14%,transparent); border: 1px solid color-mix(in oklab,var(--accent) 30%,var(--line)); border-radius: 8px; padding: 10px; }
+    .sds-lines { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+    .sds-ln { height: 5px; background: color-mix(in oklab,var(--fg) 14%,transparent); border-radius: 2px; }
+    .sds-tbl { margin-top: 8px; display: grid; grid-template-columns: auto 1fr; row-gap: 4px; column-gap: 8px; font-size: 11.5px; color: var(--muted); }
+    .sds-tags { display: flex; gap: 6px; margin-top: 4px; align-items: center; flex-wrap: wrap; }
+    .sds-tag { padding: 5px 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg-2); font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: .06em; }
+
+    /* Incident mock */
+    .inc-body { font-size: 13px; line-height: 1.5; color: var(--muted); }
+    .inc-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .inc-tag { padding: 5px 8px; border-radius: 6px; font-family: var(--mono); font-size: 10.5px; }
+    .inc-tag.hi { background: color-mix(in oklab,var(--accent) 16%,transparent); color: var(--accent); border: 1px solid color-mix(in oklab,var(--accent) 30%,var(--line)); }
+    .inc-tag.lo { background: var(--bg-2); border: 1px solid var(--line); color: var(--muted); }
+    .inc-action { padding: 10px; border-radius: 8px; background: color-mix(in oklab,var(--fg) 4%,transparent); border: 1px dashed var(--line); }
+    .inc-action-body { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+    /* ── How it works ── */
+    .steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-top: 56px; }
+    .step { padding: 24px; border-radius: 14px; background: var(--bg-2); border: 1px solid var(--line); }
+    .step .n { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .16em; color: var(--soft); }
+    .step h4 { font-size: 17px; font-weight: 600; margin: 14px 0 6px; letter-spacing: -.02em; }
+    .step p { font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+
+    /* ── Stats ── */
+    .stats { display: grid; grid-template-columns: repeat(4,1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: 48px; }
+    .stat { padding: 32px 28px; border-right: 1px solid var(--line); }
+    .stat:last-child { border-right: 0; }
+    .stat .v { font-size: clamp(36px,4.5vw,56px); font-weight: 600; line-height: .95; letter-spacing: -.04em; }
+    .stat .v em { font-style: italic; font-family: var(--serif); font-weight: 400; color: var(--accent); }
+    .stat .l { margin-top: 16px; font-size: 13.5px; color: var(--muted); max-width: 28ch; line-height: 1.5; }
+
+    /* ── Why us ── */
+    .why-body { font-size: 16px; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; max-width: 680px; }
+    .why-body strong { color: var(--fg); font-weight: 600; }
+
+    /* ── Security ── */
+    .trust-links { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    .trust-links a { font-size: 14px; font-weight: 600; color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: border-color .15s; }
+    .trust-links a:hover { border-color: var(--fg); }
+
+    /* ── Approach ── */
+    .approach-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; margin-top: 56px; padding-top: 48px; border-top: 1px solid var(--line-2); }
+    .approach-item h4 { font-size: 16px; font-weight: 600; margin-bottom: 8px; letter-spacing: -.02em; }
+    .approach-item p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── Integrations ── */
+    .integ { display: grid; grid-template-columns: repeat(6,1fr); gap: 12px; margin-top: 48px; }
+    .integ-it { aspect-ratio: 1.6/1; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-2); display: grid; place-items: center; }
+    .integ-it span { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); letter-spacing: -.005em; }
+    .integ-it .gl { width: 18px; height: 18px; border-radius: 5px; background: color-mix(in oklab,var(--fg) 22%,transparent); flex-shrink: 0; }
+
+    /* ── Platform cards ── */
+    .platform-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 56px; }
+    .plat-card {
+      border: 1px solid var(--line); border-radius: 18px; padding: 36px;
+      background: var(--bg-2); display: flex; flex-direction: column; gap: 16px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .plat-card:hover { border-color: rgba(10,20,16,.22); box-shadow: 0 8px 32px -8px rgba(10,20,16,.12); }
+    .plat-name { font-size: 22px; font-weight: 600; letter-spacing: -.025em; }
+    .plat-desc { font-size: 15px; color: var(--muted); line-height: 1.6; flex: 1; }
+
+    /* ── Testimonial ── */
+    .quote { display: grid; grid-template-columns: 1.5fr 1fr; gap: 56px; align-items: center; padding: 48px 0; }
+    .quote blockquote { font-size: clamp(20px,2.4vw,28px); font-weight: 500; letter-spacing: -.02em; margin: 0; line-height: 1.28; }
+    .quote blockquote em { font-family: var(--serif); font-weight: 400; font-style: italic; }
+    .quote .meta { display: flex; align-items: center; gap: 14px; margin-top: 28px; }
+    .quote .av { width: 44px; height: 44px; border-radius: 50%; background: color-mix(in oklab,var(--fg) 18%,transparent); border: 1px solid var(--line); flex-shrink: 0; }
+    .quote .who { font-weight: 600; font-size: 14.5px; }
+    .quote .role { font-size: 13px; color: var(--soft); margin-top: 2px; }
+    .case-card { padding: 24px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-2); }
+    .case-row { display: flex; gap: 18px; margin-top: 14px; flex-wrap: wrap; }
+    .case-stat .v { font-size: 24px; font-weight: 600; letter-spacing: -.025em; }
+    .case-stat .l { font-size: 12px; color: var(--soft); margin-top: 4px; line-height: 1.4; }
+
+    /* ── CTA / Contact ── */
+    .cta-block {
+      border-radius: 24px; padding: 64px;
+      background: radial-gradient(120% 80% at 100% 0%,color-mix(in oklab,var(--accent) 22%,transparent),transparent 60%), var(--bg-2);
+      border: 1px solid var(--line);
+      display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px;
+    }
+    .cta-h2 { font-size: clamp(28px,3.5vw,44px); font-weight: 600; letter-spacing: -.03em; line-height: 1.05; }
+    .cta-h2 em { font-style: italic; font-family: var(--serif); font-weight: 400; }
+    .cta-email { font-size: clamp(18px,2vw,24px); font-weight: 600; letter-spacing: -.025em; color: var(--fg); text-decoration: none; border-bottom: 2px solid var(--fg); padding-bottom: 2px; transition: opacity .15s; }
+    .cta-email:hover { opacity: .7; }
+
+    .form { display: flex; flex-direction: column; gap: 12px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
+    .field input, .field select, .field textarea {
+      background: var(--bg-3); border: 1px solid var(--line); border-radius: 10px;
+      padding: 12px 14px; color: var(--fg); font-family: var(--sans); font-size: 14.5px; font-weight: 500; line-height: 1.4;
+      outline: none; transition: border-color .15s; width: 100%;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
+    .field textarea { resize: vertical; }
+
+    /* ── Footer ── */
+    .foot { padding: 64px 0 40px; border-top: 1px solid var(--line); }
+    .foot-logo { display: flex; align-items: center; text-decoration: none; margin-bottom: 16px; }
+    .foot-logo img { height: 22px; width: auto; }
+    .foot-grid { display: grid; grid-template-columns: 1.5fr repeat(4,1fr); gap: 40px; }
+    .foot-col h5 { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--soft); margin: 0 0 16px; }
+    .foot-col a { display: block; color: var(--muted); text-decoration: none; font-size: 14px; margin-bottom: 10px; }
+    .foot-col a:hover { color: var(--fg); }
+    .foot-bottom { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--line-2); display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; color: var(--soft); flex-wrap: wrap; gap: 8px; }
+
+    /* ── Booking Calendar ── */
+    .cal-widget { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-3); overflow: hidden; }
+    .cal-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--line-2); }
+    .cal-month { font-weight: 600; font-size: 14px; letter-spacing: -.01em; }
+    .cal-nav { background: none; border: none; cursor: pointer; padding: 4px 10px; border-radius: 7px; color: var(--muted); font-size: 18px; line-height: 1; transition: background .12s, color .12s; }
+    .cal-nav:hover { background: var(--bg-2); color: var(--fg); }
+    .cal-day-names { display: grid; grid-template-columns: repeat(7,1fr); border-bottom: 1px solid var(--line-2); }
+    .cal-day-names span { text-align: center; padding: 8px 4px; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--soft); }
+    .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); padding: 6px 8px 8px; }
+    .cal-day { text-align: center; padding: 7px 4px; font-size: 13px; font-weight: 500; border-radius: 8px; line-height: 1; }
+    .cal-day.empty { pointer-events: none; }
+    .cal-day.past, .cal-day.weekend { color: color-mix(in oklab,var(--fg) 28%,transparent); pointer-events: none; cursor: default; }
+    .cal-day.available { cursor: pointer; }
+    .cal-day.available:hover { background: color-mix(in oklab,var(--accent) 12%,transparent); color: var(--accent); }
+    .cal-day.selected { background: var(--accent); color: white !important; }
+    .cal-slots { border-top: 1px solid var(--line-2); padding: 14px 16px; }
+    .cal-slots-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); margin-bottom: 10px; }
+    .slots-grid { display: flex; flex-wrap: wrap; gap: 7px; }
+    .slot { padding: 7px 13px; border: 1px solid var(--line); border-radius: 8px; font-size: 12.5px; font-weight: 500; font-family: var(--mono); cursor: pointer; background: var(--bg-2); transition: border-color .12s, background .12s, color .12s; white-space: nowrap; }
+    .slot:hover { border-color: var(--accent); color: var(--accent); background: color-mix(in oklab,var(--accent) 8%,transparent); }
+    .slot.selected { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* ── Platform logos ── */
+    .plat-logo { display: flex; align-items: center; gap: 10px; }
+    .plat-logo-icon { width: 30px; height: 30px; flex-shrink: 0; }
+    .plat-logo-name { font-size: 20px; font-weight: 600; letter-spacing: -.025em; }
+
+    /* ── Reveal ── */
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity .5s ease, transform .5s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .wrap { padding: 0 32px; }
+      .integ { grid-template-columns: repeat(4,1fr); }
+      .foot-grid { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .wrap { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 64px 0 48px; }
+      section { padding: 72px 0; }
+      .product-grid { grid-template-columns: 1fr; }
+      .feature-grid { grid-template-columns: 1fr 1fr; }
+      .feat-row { grid-template-columns: 1fr !important; gap: 32px; }
+      .feat-row.flip .copy { order: 0; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .stat:nth-child(2) { border-right: 0; }
+      .stat:nth-child(3) { border-top: 1px solid var(--line); }
+      .integ { grid-template-columns: repeat(3,1fr); }
+      .platform-grid { grid-template-columns: 1fr; }
+      .quote { grid-template-columns: 1fr; }
+      .cta-block { grid-template-columns: 1fr; gap: 32px; padding: 36px; }
+      .approach-grid { grid-template-columns: 1fr; gap: 24px; }
+      .foot-grid { grid-template-columns: 1fr 1fr; }
+      .foot-bottom { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .feature-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .integ { grid-template-columns: repeat(2,1fr); }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="wrap nav-row">
+      <a href="#" class="nav-logo">
+        <img src="SentinelHQ-wordmark-navy-gold.png" alt="SentinelHQ" />
+      </a>
+      <nav class="nav-links">
+        <a href="#products">Products</a>
+        <a href="#technology">Technology</a>
+        <a href="#approach">How it works</a>
+        <a href="#security">Security</a>
+        <a href="#about">About</a>
+      </nav>
+      <div class="nav-cta">
+        <a class="btn btn-ghost" href="#contact">Sign in</a>
+        <a class="btn btn-primary" href="#contact">Get your free 3-day demo <span class="arr">→</span></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div style="margin-top:22px;max-width:920px" class="reveal">
+        <h1 class="display">One system for health,<br>safety and compliance.<br>Built for your <em>industry</em>.</h1>
+      </div>
+      <div style="max-width:640px;margin-top:24px" class="reveal">
+        <p class="lead">Simple health and safety software for golf clubs and care homes. Built around how your organisation works, with tools that save you hours of paperwork every week.</p>
+      </div>
+      <div class="hero-cta reveal">
+        <a class="btn btn-primary" href="#contact">Get your free 3-day demo <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="#products">Explore products</a>
+        <span class="hero-meta">No card · UK data · Ready in 24 hours</span>
+      </div>
+      <div class="badges reveal">
+        <span class="pill"><span class="pill-dot"></span> Regulator-ready</span>
+        <span class="pill"><span class="pill-dot"></span> UK data registered</span>
+        <span class="pill"><span class="pill-dot"></span> Made in the UK</span>
+      </div>
+
+      <!-- Video preview frame -->
+      <div class="preview reveal">
+        <div class="preview-bar">
+          <span class="tl" style="background:#ff5f57"></span>
+          <span class="tl" style="background:#febc2e"></span>
+          <span class="tl" style="background:#28c840"></span>
+          <span class="url">caresentinel.app/overview</span>
+          <span class="stamp">LIVE · 14:02 GMT</span>
+        </div>
+        <div class="preview-vid" id="heroWrap" data-yt="31A2gEnmdtQ">
+          <img src="poster.jpg" alt="SentinelHQ platform walkthrough" />
+          <button class="play-btn" id="playBtn" type="button" aria-label="Play video">
+            <span class="play-disc">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.14v13.72a1 1 0 0 0 1.52.85l11.3-6.86a1 1 0 0 0 0-1.71L9.52 4.29A1 1 0 0 0 8 5.14Z"/></svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section id="products">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="eyebrow">Products</span>
+        <h2 class="h2" style="margin-top:18px;max-width:22ch">Two products. Two industries. Both <em>ready to use</em> from day one.</h2>
+      </div>
+      <div class="product-grid">
+        <a href="https://clubsentinel.co.uk" class="pcard reveal" target="_blank" rel="noopener">
+          <span class="pcard-chip">For golf clubs</span>
+          <div class="pcard-name">ClubSentinel</div>
+          <p class="pcard-desc">Health and safety management built for UK golf clubs. Keep on top of fire safety, accident records, hazardous chemicals, staff training and equipment — everything in one place, ready when the inspector visits.</p>
+          <ul class="pcard-list">
+            <li>Upload a chemical safety sheet — the key information fills in automatically</li>
+            <li>Record inspections by talking — no forms to fill in</li>
+            <li>Track all equipment and scan barcodes to pull up records on your phone</li>
+            <li>Log accidents and near-misses — the system checks whether HSE reporting is required</li>
+            <li>Staff training records, audits and checklists all in one place</li>
+            <li>See at a glance how your club measures up against health and safety requirements</li>
+          </ul>
+          <span class="pcard-link">Visit ClubSentinel →</span>
+        </a>
+        <a href="https://caresentinel.uk" class="pcard reveal" target="_blank" rel="noopener">
+          <span class="pcard-chip">For care homes</span>
+          <div class="pcard-name">CareSentinel</div>
+          <p class="pcard-desc">Health and safety compliance built around CQC expectations. Moving and handling, infection control, resident risk assessments — always organised and ready when the inspector visits.</p>
+          <ul class="pcard-list">
+            <li>Chemical safety sheets read and filed automatically</li>
+            <li>Record room inspections by talking — no typing needed</li>
+            <li>A complete record of hazardous substances with an overall safety score</li>
+            <li>Log accidents and the system checks whether HSE reporting is required</li>
+            <li>Scan barcodes from your phone to pull up records anywhere in the system</li>
+            <li>Keep and renew risk assessments and moving and handling records</li>
+          </ul>
+          <span class="pcard-link">Visit CareSentinel →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECHNOLOGY -->
+  <section id="technology">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="eyebrow">Technology</span>
+        <div style="margin-top:18px;display:grid;grid-template-columns:1fr 420px;gap:64px;align-items:end">
+          <h2 class="h2" style="max-width:18ch">Smart tools that save you time — not a chatbot <em>bolted on</em>.</h2>
+          <p class="body-t" style="padding-bottom:6px">Most software has added a basic AI assistant as an afterthought. SentinelHQ uses technology at the specific points where it genuinely saves you time. A person always reviews and approves — the software handles the repetitive work.</p>
+        </div>
+      </div>
+      <div class="feature-grid reveal">
+        <div class="feature">
+          <span class="ic">01</span>
+          <h3>Talk through your inspection</h3>
+          <p>Walk an area and describe what you see out loud. The software turns your words into a complete, structured inspection record. No typing. No desk needed.</p>
+        </div>
+        <div class="feature">
+          <span class="ic">02</span>
+          <h3>Chemical safety sheets, filled in automatically</h3>
+          <p>Upload the supplier's safety sheet and the key information — hazards, protective equipment needed, what to do in an emergency — is read and saved for you.</p>
+        </div>
+        <div class="feature">
+          <span class="ic">03</span>
+          <h3>No paperwork? Photograph the bottle.</h3>
+          <p>No safety sheet to hand? Take a photo of the bottle or container label. The software identifies the chemical and fills in the record for you.</p>
+        </div>
+        <div class="feature">
+          <span class="ic">04</span>
+          <h3>Accident reports, written for you</h3>
+          <p>Describe what happened and the software suggests a corrective action — what caused it and what to do to prevent it happening again. You review and approve.</p>
+        </div>
+        <div class="feature">
+          <span class="ic">05</span>
+          <h3>Complete an audit, get a professional report</h3>
+          <p>Carry out an audit on your phone. A formatted, dated report is created automatically when you finish — ready to share with your board or show to a visiting inspector.</p>
+        </div>
+        <div class="feature">
+          <span class="ic">06</span>
+          <h3>Ask questions, get answers from your own records</h3>
+          <p>Want to know who is overdue for first-aid training? Just ask. The system gives a clear answer and shows exactly where it found the information.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEEP DIVE -->
+  <section>
+    <div class="wrap">
+      <div class="reveal">
+        <span class="eyebrow">Inside the platform</span>
+        <h2 class="h2" style="margin-top:18px;max-width:20ch">Every feature built around how your industry works.</h2>
+      </div>
+
+      <div style="margin-top:56px">
+
+        <!-- Row 1: Voice inspections -->
+        <div class="feat-row reveal">
+          <div class="copy">
+            <span class="eyebrow">CareSentinel · Inspections</span>
+            <h3 style="margin-top:14px">Walk a room. <em>Talk</em>. The record writes itself.</h3>
+            <p class="lead" style="margin-top:14px">Press record on your phone. Describe what you see as you walk. The software turns your words into a structured inspection — covering cleanliness, safety, equipment, environment and any actions needed — and saves it with a timestamp. No typing. No desk required.</p>
+            <ul class="points">
+              <li>Sectioned report: Cleanliness · Safety · Equipment · Environment · Actions</li>
+              <li>Actions are automatically picked out and added to your follow-up list</li>
+              <li>Works offline; syncs the moment you have signal</li>
+            </ul>
+          </div>
+          <div class="shot">
+            <div class="mock-ui">
+              <div class="micro" style="color:var(--accent)">● RECORDING · 00:42</div>
+              <div class="voice-bars">
+                <div class="vb a" style="height:20%"></div><div class="vb a" style="height:72%"></div><div class="vb a" style="height:99%"></div>
+                <div class="vb a" style="height:89%"></div><div class="vb a" style="height:47%"></div><div class="vb a" style="height:48%"></div>
+                <div class="vb a" style="height:90%"></div><div class="vb a" style="height:99%"></div><div class="vb a" style="height:71%"></div>
+                <div class="vb a" style="height:21%"></div><div class="vb a" style="height:73%"></div><div class="vb a" style="height:100%"></div>
+                <div class="vb a" style="height:90%"></div><div class="vb a" style="height:48%"></div><div class="vb a" style="height:49%"></div>
+                <div class="vb a" style="height:91%"></div><div class="vb a" style="height:99%"></div><div class="vb a" style="height:70%"></div>
+                <div class="vb a" style="height:22%"></div><div class="vb a" style="height:74%"></div><div class="vb a" style="height:98%"></div>
+                <div class="vb a" style="height:88%"></div><div class="vb a" style="height:46%"></div><div class="vb a" style="height:50%"></div>
+                <div class="vb a" style="height:92%"></div><div class="vb a" style="height:98%"></div>
+                <div class="vb" style="height:40%"></div><div class="vb" style="height:30%"></div><div class="vb" style="height:55%"></div>
+                <div class="vb" style="height:28%"></div><div class="vb" style="height:45%"></div><div class="vb" style="height:32%"></div>
+                <div class="vb" style="height:50%"></div><div class="vb" style="height:38%"></div><div class="vb" style="height:26%"></div>
+                <div class="vb" style="height:42%"></div>
+              </div>
+              <div class="voice-items">
+                <div class="vi"><span class="vi-dot"></span><span>Cleanliness — bathroom mirror smudged, west window dust</span></div>
+                <div class="vi"><span class="vi-dot"></span><span>Safety — call bell working, fire door clear</span></div>
+                <div class="vi"><span class="vi-dot"></span><span>Equipment — bed brakes engaged, hoist serviced</span></div>
+                <div class="vi"><span class="vi-dot"></span><span>Environment — temp 21.4°C, slight draught noted</span></div>
+                <div class="vi"><span class="vi-dot"></span><span>Actions — schedule mirror clean, log dust on sill</span></div>
+              </div>
+            </div>
+            <span class="shot-label">Inspection · room 14</span>
+          </div>
+        </div>
+
+        <!-- Row 2: SDS extraction (flipped) -->
+        <div class="feat-row flip reveal">
+          <div class="copy">
+            <span class="eyebrow">CareSentinel · Hazardous Substances</span>
+            <h3 style="margin-top:14px">From a supplier's safety sheet to a full record in <em>under a minute</em>.</h3>
+            <p class="lead" style="margin-top:14px">Drop in the supplier's safety sheet — two pages or sixteen. The software reads it and pulls out everything you need: the hazards, what protective equipment is needed, what to do in an emergency. It flags anything missing and files it against the right chemical.</p>
+            <ul class="points">
+              <li>Reads all the key information — hazards, protective equipment, storage and emergency guidance</li>
+              <li>Gives each chemical an overall safety score based on what it is, how it's stored and how it's used</li>
+              <li>Sends reminders when safety sheets need updating — 90, 30 and 7 days before they expire</li>
+            </ul>
+          </div>
+          <div class="shot">
+            <div class="mock-ui">
+              <div class="sds-grid">
+                <div class="sds-pdf">
+                  <div class="micro">SUPPLIER PDF · 8 PAGES</div>
+                  <div class="sds-lines">
+                    <div class="sds-ln" style="width:80%"></div>
+                    <div class="sds-ln" style="width:70%"></div>
+                    <div class="sds-ln" style="width:90%"></div>
+                    <div class="sds-ln" style="width:60%"></div>
+                    <div class="sds-ln" style="width:85%"></div>
+                    <div class="sds-ln" style="width:75%"></div>
+                    <div class="sds-ln" style="width:65%"></div>
+                    <div class="sds-ln" style="width:80%"></div>
+                  </div>
+                </div>
+                <div class="sds-rec">
+                  <div class="micro" style="color:var(--accent)">COSHH RECORD · DRAFT</div>
+                  <div class="sds-tbl">
+                    <span>Substance</span><b style="color:var(--fg);font-size:11px">Sodium hypochlorite 4.5%</b>
+                    <span>UN no.</span><b style="color:var(--fg)">1791</b>
+                    <span>Hazards</span><b style="color:var(--fg)">H290, H314, H400</b>
+                    <span>PPE</span><b style="color:var(--fg)">Gloves, eye protection</b>
+                    <span>First aid</span><b style="color:var(--fg);font-size:10.5px">Rinse 15 min, seek advice</b>
+                  </div>
+                </div>
+              </div>
+              <div class="sds-tags">
+                <span class="sds-tag">GHS05</span>
+                <span class="sds-tag">GHS09</span>
+                <span style="margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--accent)">EXTRACTED · 38/38 FIELDS</span>
+              </div>
+            </div>
+            <span class="shot-label">COSHH · SDS extract</span>
+          </div>
+        </div>
+
+        <!-- Row 3: Incidents -->
+        <div class="feat-row reveal">
+          <div class="copy">
+            <span class="eyebrow">CareSentinel · Incidents</span>
+            <h3 style="margin-top:14px">Every accident <em>checked against reporting rules</em> the moment it's logged.</h3>
+            <p class="lead" style="margin-top:14px">Staff describe what happened in plain language. The software works out how serious it is, checks whether it needs to be reported to the Health and Safety Executive, suggests the corrective action, and sends it to the right manager — with a full record throughout.</p>
+            <ul class="points">
+              <li>Seriousness is assessed using Health and Safety Executive guidelines</li>
+              <li>Automatically flags accidents that must be reported to the HSE</li>
+              <li>Suggests what caused the incident and how to prevent it happening again</li>
+            </ul>
+          </div>
+          <div class="shot">
+            <div class="mock-ui">
+              <div class="micro">INCIDENT #2407-014</div>
+              <div class="inc-body">Resident slipped on water near east lounge. No injury sustained. Wet floor sign placed; cleaning team alerted within 2 minutes.</div>
+              <div class="inc-tags">
+                <span class="inc-tag hi">SEVERITY · MINOR</span>
+                <span class="inc-tag lo">RIDDOR · NOT REPORTABLE</span>
+              </div>
+              <div class="inc-action">
+                <div class="micro">CORRECTIVE ACTION · DRAFTED</div>
+                <div class="inc-action-body">Install drip tray under east-lounge plant pot. Add daily floor check to housekeeping rota (06:00, 14:00). Brief team in next handover.</div>
+              </div>
+            </div>
+            <span class="shot-label">Incident · RIDDOR check</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="approach">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="eyebrow">How it works</span>
+        <h2 class="h2" style="margin-top:18px;max-width:20ch">Up and running in <em>days</em>, not months.</h2>
+      </div>
+      <div class="steps reveal">
+        <div class="step"><div class="n">Step 01</div><h4>Talk for 20 minutes</h4><p>We find out how your club or care home works — your records, routines and processes. We set the system up around you. No blank templates to fill in.</p></div>
+        <div class="step"><div class="n">Step 02</div><h4>Go live in 24 hours</h4><p>Your account is set up with your organisation's name and branding. Your team gets access and the app is ready to use on any phone, that same day.</p></div>
+        <div class="step"><div class="n">Step 03</div><h4>The software does the hard work</h4><p>Chemical safety sheets are read automatically, inspections are recorded by voice, accidents are logged with suggested next steps — all handled as they happen.</p></div>
+        <div class="step"><div class="n">Step 04</div><h4>Inspector-ready, always</h4><p>Your compliance score and professional reports are always up to date — ready for the HSE, your regulator, or an unannounced visit.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section id="why">
+    <div class="wrap">
+      <div class="reveal" style="max-width:820px">
+        <span class="eyebrow">Why us</span>
+        <h2 class="h2" style="margin-top:18px">There isn't another product like it on the market.</h2>
+        <p class="why-body" style="margin-top:24px">Big compliance software starts at £30,000 a year and takes six months to set up. Generic apps expect you to build your own health and safety system from scratch. A golf club or care home can't afford the time or the cost of either.</p>
+        <p class="why-body"><strong>SentinelHQ is built for organisations like yours.</strong> Ready to use from day one, with everything set up for your industry. Designed for people who spend their day on the move — not sitting at a desk. Built and supported in the UK.</p>
+      </div>
+      <div class="approach-grid reveal">
+        <div class="approach-item">
+          <h4>Built for your industry</h4>
+          <p>Every part of the system reflects the rules and requirements of golf clubs or care homes — not a generic checklist you have to adapt yourself.</p>
+        </div>
+        <div class="approach-item">
+          <h4>Smart tools that earn their place</h4>
+          <p>The software helps with reports and suggested actions. You review and sign off — the system handles the time-consuming work.</p>
+        </div>
+        <div class="approach-item">
+          <h4>Your data stays in the UK</h4>
+          <p>Your information is stored in the UK, registered with the UK data regulator, and completely separate from other organisations. We never use your data to improve our software.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECURITY -->
+  <section id="security">
+    <div class="wrap">
+      <div class="reveal" style="max-width:820px">
+        <span class="eyebrow">Security</span>
+        <h2 class="h2" style="margin-top:18px">Built to keep your data safe.</h2>
+        <p class="lead" style="margin-top:20px">Your information is completely separate from other clubs and care homes — there is no way for one organisation to see another's records. Everything is stored and secured in the UK, and we are registered with the UK data regulator. The tools we use to power our software are under contract and do not learn from your data.</p>
+        <div class="trust-links">
+          <a href="https://caresentinel.uk/security" target="_blank" rel="noopener">Read the security overview at CareSentinel →</a>
+          <a href="https://clubsentinel.co.uk/security" target="_blank" rel="noopener">Read the security overview at ClubSentinel →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATFORMS -->
+  <section id="platforms">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="eyebrow">Products</span>
+        <h2 class="h2" style="margin-top:18px;max-width:20ch">Choose your <em>platform</em>.</h2>
+      </div>
+      <div class="platform-grid reveal">
+        <div class="plat-card">
+          <div class="plat-logo">
+            <svg class="plat-logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 2L3 6v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V6l-9-4z" fill="#1f8a5b"/>
+              <line x1="9" y1="8" x2="9" y2="16" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M9 8l6 2.5-6 2.5z" fill="white"/>
+            </svg>
+            <span class="plat-logo-name">ClubSentinel</span>
+          </div>
+          <div class="plat-desc">H&amp;S compliance for golf clubs</div>
+          <a class="btn btn-ghost" href="https://clubsentinel.co.uk" target="_blank" rel="noopener">Learn more <span class="arr">→</span></a>
+        </div>
+        <div class="plat-card">
+          <div class="plat-logo">
+            <svg class="plat-logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 2L3 6v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V6l-9-4z" fill="#1f8a5b"/>
+              <path d="M12 16s-5-3.5-5-6.4C7 8 8.1 7 9.5 7c.85 0 1.65.46 2.5 1.5.85-1.04 1.65-1.5 2.5-1.5C15.9 7 17 8 17 9.6c0 2.9-5 6.4-5 6.4z" fill="white"/>
+            </svg>
+            <span class="plat-logo-name">CareSentinel</span>
+          </div>
+          <div class="plat-desc">H&amp;S compliance for care homes</div>
+          <a class="btn btn-ghost" href="https://caresentinel.uk" target="_blank" rel="noopener">Learn more <span class="arr">→</span></a>
+        </div>
+        <div class="plat-card">
+          <div class="plat-logo">
+            <svg class="plat-logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 2L3 6v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V6l-9-4z" fill="#1f8a5b"/>
+              <path d="M8 12l2.5 2.5 5.5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="plat-logo-name">ReferenceSentinel</span>
+          </div>
+          <div class="plat-desc">Fast, automated reference checking</div>
+          <a class="btn btn-ghost" href="https://referencesentinel.co.uk" target="_blank" rel="noopener">Learn more <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section>
+    <div class="wrap">
+      <div class="reveal">
+        <span class="eyebrow">From the field</span>
+        <div style="margin-top:18px;max-width:760px">
+          <blockquote style="font-size:clamp(20px,2.4vw,28px);font-weight:500;letter-spacing:-.02em;line-height:1.28;margin:0">
+            "ClubSentinel has completely changed how we approach health and safety at the club. <em style="font-family:var(--serif);font-weight:400;font-style:italic">What used to take a full day of preparation before an audit now takes an hour.</em>"
+          </blockquote>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:28px">
+            <div style="width:44px;height:44px;border-radius:50%;background:color-mix(in oklab,var(--fg) 18%,transparent);border:1px solid var(--line);flex-shrink:0"></div>
+            <div>
+              <div style="font-weight:600;font-size:14.5px">Geoff Aisbitt</div>
+              <div style="font-size:13px;color:var(--soft);margin-top:2px">Health and Safety Manager · Wearside Golf Club</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap">
+      <div class="reveal" style="max-width:820px">
+        <span class="eyebrow">About</span>
+        <h2 class="h2" style="margin-top:18px">Built by someone who's been there.</h2>
+        <p class="lead" style="margin-top:24px">SentinelHQ is built by Kevin Jager — three decades of building software for businesses that don't have time to wait for IT. Hundreds of websites delivered, multiple businesses built, and a clear conviction that compliance software has been overpriced and under-thought for too long.</p>
+        <p class="lead" style="margin-top:16px">That conviction is why CareSentinel and ClubSentinel exist. Mid-market organisations deserve enterprise-grade compliance tooling without enterprise-grade contracts.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="cta-block reveal">
+        <div>
+          <span class="eyebrow">Get in touch</span>
+          <h2 class="cta-h2" style="margin-top:14px">When the inspector walks in, you need <em>everything in order</em> — not a last-minute scramble.</h2>
+          <p class="lead" style="margin-top:18px">Try ClubSentinel free for three days using your own club's information. No credit card, no commitment. We set everything up and show you around.</p>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:28px">
+            <span class="micro">OR EMAIL US DIRECTLY</span>
+            <a class="cta-email" href="mailto:hello@sentinelhq.co.uk">hello@sentinelhq.co.uk</a>
+          </div>
+        </div>
+        <form class="form" onsubmit="return false">
+          <div class="form-row">
+            <div class="field"><label>Name</label><input type="text" placeholder="Helena Marsh" /></div>
+            <div class="field"><label>Work email</label><input type="email" placeholder="you@careorg.co.uk" /></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label>Organisation</label><input type="text" placeholder="Sunnymead Golf Club" /></div>
+            <div class="field">
+              <label>Sites</label>
+              <select>
+                <option value="">Select…</option>
+                <option>1 site</option>
+                <option>2–5 sites</option>
+                <option>6–10 sites</option>
+                <option>11+ sites</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Preferred date &amp; time</label>
+            <div class="cal-widget" id="calWidget">
+              <div class="cal-header">
+                <button class="cal-nav" id="calPrev" type="button">‹</button>
+                <span class="cal-month" id="calMonth"></span>
+                <button class="cal-nav" id="calNext" type="button">›</button>
+              </div>
+              <div class="cal-day-names">
+                <span>Mon</span><span>Tue</span><span>Wed</span>
+                <span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+              </div>
+              <div class="cal-grid" id="calGrid"></div>
+              <div class="cal-slots" id="calSlots" style="display:none">
+                <div class="cal-slots-label" id="calSlotsLabel"></div>
+                <div class="slots-grid" id="slotsGrid"></div>
+              </div>
+            </div>
+            <input type="hidden" id="bookingDateTime" name="booking" />
+          </div>
+          <div class="field">
+            <label>What would you like to see?</label>
+            <textarea rows="3" placeholder="I'd like to see how the inspections and accident reporting work."></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit" style="margin-top:6px;align-self:flex-start">
+            Get your free 3-day demo <span class="arr">→</span>
+          </button>
+          <span class="micro">By submitting you agree to our processing of your details under our privacy notice. UK-only.</span>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <a href="#" class="foot-logo"><img src="SentinelHQ-wordmark-navy-gold.png" alt="SentinelHQ" /></a>
+          <p class="body-t" style="font-size:13.5px;max-width:320px">Health and safety compliance software for golf clubs and care homes. Built and hosted in the United Kingdom.</p>
+          <div class="micro" style="margin-top:24px">HELLO@SENTINELHQ.CO.UK</div>
+        </div>
+        <div class="foot-col">
+          <h5>Products</h5>
+          <a href="https://caresentinel.uk" target="_blank" rel="noopener">CareSentinel</a>
+          <a href="https://clubsentinel.co.uk" target="_blank" rel="noopener">ClubSentinel</a>
+          <a href="https://referencesentinel.co.uk" target="_blank" rel="noopener">ReferenceSentinel</a>
+        </div>
+        <div class="foot-col">
+          <h5>Platform</h5>
+          <a href="#technology">Voice inspections</a>
+          <a href="#technology">Hazardous substances</a>
+          <a href="#technology">Accidents &amp; reporting</a>
+          <a href="#technology">Audits &amp; reports</a>
+        </div>
+        <div class="foot-col">
+          <h5>Company</h5>
+          <a href="#about">About</a>
+          <a href="#why">Approach</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="foot-col">
+          <h5>Trust</h5>
+          <a href="#security">Security overview</a>
+          <a href="https://caresentinel.uk/legal/privacy-policy" target="_blank" rel="noopener">Privacy notice</a>
+          <a href="https://caresentinel.uk/legal/terms-of-service" target="_blank" rel="noopener">Terms</a>
+          <a href="https://caresentinel.uk/legal/data-processing-agreement" target="_blank" rel="noopener">DPA</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 SentinelHQ · Kevin Jager · ICO registration <a href="/ico-registration-ZC138385.pdf" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">ZC138385</a></span>
+        <span>Built in Yorkshire · Hosted in the UK</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const ro = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+    // YouTube facade
+    const wrap = document.getElementById('heroWrap');
+    const btn  = document.getElementById('playBtn');
+    btn.addEventListener('click', () => {
+      const id = wrap.dataset.yt;
+      const f  = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+      f.title = 'SentinelHQ product walkthrough';
+      f.setAttribute('allow', 'accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share');
+      f.setAttribute('allowfullscreen', '');
+      wrap.innerHTML = '';
+      wrap.appendChild(f);
+    });
+
+    // Booking calendar
+    (function() {
+      const TIMES = ['09:00','09:30','10:00','10:30','11:00','11:30',
+                     '13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30'];
+      const MONTHS = ['January','February','March','April','May','June',
+                      'July','August','September','October','November','December'];
+      const DAYS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const DAYS_LONG = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+      let cur = new Date(); cur.setDate(1);
+      let selDate = null, selTime = null;
+
+      function isPast(d) { const t = new Date(); t.setHours(0,0,0,0); return d < t; }
+      function isWeekend(d) { const w = d.getDay(); return w === 0 || w === 6; }
+      function pad(n) { return String(n).padStart(2,'0'); }
+
+      function render() {
+        document.getElementById('calMonth').textContent = MONTHS[cur.getMonth()] + ' ' + cur.getFullYear();
+        const grid = document.getElementById('calGrid');
+        grid.innerHTML = '';
+        const year = cur.getFullYear(), month = cur.getMonth();
+        let startDay = new Date(year, month, 1).getDay() - 1;
+        if (startDay < 0) startDay = 6;
+        for (let i = 0; i < startDay; i++) {
+          const el = document.createElement('div'); el.className = 'cal-day empty'; grid.appendChild(el);
+        }
+        const total = new Date(year, month + 1, 0).getDate();
+        for (let d = 1; d <= total; d++) {
+          const date = new Date(year, month, d);
+          const el = document.createElement('div');
+          el.textContent = d;
+          if (isPast(date) || isWeekend(date)) {
+            el.className = 'cal-day ' + (isPast(date) ? 'past' : 'weekend');
+          } else {
+            el.className = 'cal-day available';
+            if (selDate && date.toDateString() === selDate.toDateString()) el.classList.add('selected');
+            el.addEventListener('click', () => pickDate(date));
+          }
+          grid.appendChild(el);
+        }
+      }
+
+      function pickDate(date) {
+        selDate = date; selTime = null; render();
+        const slotsEl = document.getElementById('calSlots');
+        document.getElementById('calSlotsLabel').textContent =
+          DAYS_LONG[date.getDay()] + ' ' + date.getDate() + ' ' + DAYS_SHORT[date.getMonth()];
+        const sg = document.getElementById('slotsGrid'); sg.innerHTML = '';
+        TIMES.forEach(t => {
+          const btn = document.createElement('button');
+          btn.type = 'button'; btn.className = 'slot'; btn.textContent = t;
+          btn.addEventListener('click', () => {
+            selTime = t;
+            sg.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+            btn.classList.add('selected');
+            updateHidden();
+          });
+          sg.appendChild(btn);
+        });
+        slotsEl.style.display = 'block';
+        updateHidden();
+      }
+
+      function updateHidden() {
+        if (!selDate) return;
+        const d = selDate;
+        const str = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+        document.getElementById('bookingDateTime').value = selTime ? str + 'T' + selTime : str;
+      }
+
+      document.getElementById('calPrev').addEventListener('click', () => { cur.setMonth(cur.getMonth()-1); render(); });
+      document.getElementById('calNext').addEventListener('click', () => { cur.setMonth(cur.getMonth()+1); render(); });
+      render();
+    })();
+
+    // Nav: hide pricing-header two-col on small viewports
+    function onResize() {
+      document.querySelectorAll('.products-header').forEach(el => {
+        el.style.gridTemplateColumns = window.innerWidth < 768 ? '1fr' : '';
+      });
+    }
+    window.addEventListener('resize', onResize);
+    onResize();
+  </script>
+
+</body>
+</html>
