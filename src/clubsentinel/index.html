@@ -199,6 +199,11 @@ h1,h2,h3,h4{margin:0;font-weight:400;}
 
 /* testimonial */
 .quote{max-width:820px;margin:0 auto;text-align:center;}
+.quotes{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:20px;align-items:stretch;}
+.quotes .quote{margin:0;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px;}
+.quotes .quote blockquote{font-size:19px;line-height:1.5;margin:0 0 22px;}
+.quotes .quote .who{justify-content:flex-start;}
+@media (max-width:760px){.quotes{grid-template-columns:1fr;}}
 .quote .stars{color:var(--accent);letter-spacing:3px;font-size:18px;}
 .quote blockquote{font-family:var(--serif);font-size:26px;line-height:1.4;letter-spacing:-.01em;margin:20px 0 24px;}
 .quote .who{display:flex;align-items:center;justify-content:center;gap:12px;}
@@ -342,7 +347,7 @@ footer.foot{padding:56px 0 40px;border-top:1px solid var(--line-2);background:va
 <!-- FULL-BLEED COURSE IMAGE -->
 <div class="wrap" style="padding-bottom:12px;">
   <div class="imgband reveal">
-    <img src="img/hero-mower.jpg" alt="Greenkeeper mowing a UK golf course fairway on a Toro ride-on mower" loading="lazy" />
+    <img src="img/greens-mowing.jpg" style="object-position:40% 72%" alt="Greenkeeper cutting a putting green with a walk-behind greens mower" loading="lazy" />
     <div class="cap"><b>Built for every corner of the club</b> — the course, the clubhouse, the kitchen and the cellar.</div>
   </div>
 </div>
@@ -484,13 +489,24 @@ footer.foot{padding:56px 0 40px;border-top:1px solid var(--line-2);background:va
 
 <!-- TESTIMONIAL -->
 <section style="background:color-mix(in oklab,var(--pink) 7%,var(--cream));">
-  <div class="wrap quote reveal">
-    <div class="stars">★★★★★</div>
+  <div class="wrap">
+  <div class="stars quote">★★★★★</div>
+  <div class="quotes">
+  <figure class="quote reveal">
     <blockquote>"ClubSentinel has completely changed how we approach health and safety compliance management at the club. The AI features are a massive bonus — especially the ability to speak a report and have it create and log it there and then. It was easy to get all the records into the system, and now it's a simple job to look at the dashboard and see exactly what's due and when."</blockquote>
     <div class="who">
       <div class="av">GA</div>
       <div style="text-align:left;"><div class="n">Geoff Aisbitt</div><div class="r">Health &amp; Safety Manager · Wearside Golf Club</div></div>
     </div>
+  </figure>
+  <figure class="quote reveal">
+    <blockquote>"Heads of department receive automatic notifications when a document or task is due, so nothing gets missed. Our head greenkeeper uses a dedicated greens report module that lets them walk the course and record observations by voice. Every piece of equipment and club asset carries a QR code. Staff scan it on the spot to view the full service history, log an inspection or raise a fault, no going back to the office to update a spreadsheet. For any club that takes health and safety compliance seriously, I would strongly recommend ClubSentinel."</blockquote>
+    <div class="who">
+      <div class="av">RT</div>
+      <div style="text-align:left;"><div class="n">Ray Tatters</div><div class="r">Chairman · Wearside Golf Club</div></div>
+    </div>
+  </figure>
+  </div>
   </div>
 </section>
 

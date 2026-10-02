@@ -351,7 +351,8 @@
 .shq .tq .av { width: 48px; height: 48px; border-radius: 50%; background: color-mix(in oklab, var(--ink) 12%, transparent); flex: 0 0 auto; display: grid; place-items: center; font: 700 16px/1 var(--sans); color: var(--ink-2); letter-spacing: 0.02em; }
 .shq .tq .who .n { font: 600 15.5px/1.2 var(--sans); }
 .shq .tq .who .r { font-size: 13px; color: var(--soft); margin-top: 3px; }
-.shq .tq.tq-placeholder { outline: 2px dashed #c0392b; outline-offset: 4px; }
+/* odd card out spans the row so the grid never leaves a hole */
+.shq .tgrid > .tq:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .shq .tq { transition: transform .3s cubic-bezier(.2,.7,.3,1), box-shadow .3s ease; }
 .shq .tq:hover { transform: translateY(-5px); box-shadow: 0 26px 50px -30px rgba(27,26,22,0.3); }
 

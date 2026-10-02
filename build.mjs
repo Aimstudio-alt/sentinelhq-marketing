@@ -16,7 +16,7 @@ import crypto from "node:crypto";
 import { pathToFileURL } from "node:url";
 import * as esbuild from "esbuild";
 import sharp from "sharp";
-import { PAGES, SITE_URL, LASTMOD, REGISTERED_OFFICE, FOOTER_PRODUCTS } from "./src/site.mjs";
+import { PAGES, SITE_URL, LASTMOD, REGISTERED_OFFICE, FOOTER_PRODUCTS, LINKEDIN } from "./src/site.mjs";
 
 const SRC = "src";
 const OUT = "dist";
@@ -128,7 +128,7 @@ function footerLinks(currentPath) {
     if (href === currentPath) continue;
     links.push(ext ? `<a href="${href}" target="_blank" rel="noopener noreferrer">${name}</a>` : `<a href="${href}">${name}</a>`);
   }
-  links.push(`<a href="/legal.html">Legal</a>`, `<a href="mailto:hello@sentinelhq.co.uk">Contact</a>`);
+  links.push(`<a href="/legal.html">Legal</a>`, `<a href="${LINKEDIN}" target="_blank" rel="noopener noreferrer">LinkedIn</a>`, `<a href="mailto:hello@sentinelhq.co.uk">Contact</a>`);
   return `<div class="foot-links">\n        ${links.join("\n        ")}\n      </div>`;
 }
 const FOOT_LEGAL = `<div class="foot-legal">© 2026 ${escText(REGISTERED_OFFICE)} Built in North East England · Hosted in the UK.</div>`;

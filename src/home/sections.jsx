@@ -1,5 +1,5 @@
 import React from "react";
-import { FOOTER_PRODUCTS, REGISTERED_OFFICE } from "../site.mjs";
+import { FOOTER_PRODUCTS, REGISTERED_OFFICE, LINKEDIN } from "../site.mjs";
 
 // site-sections.jsx — SentinelHQ, Ditto-inspired.
 // Cream canvas, serif display, vivid offset colour-blocks behind white UI cards.
@@ -445,10 +445,9 @@ function Testimonials() {
       tag: "ClubSentinel", col: "var(--yellow)",
     },
     {
-      // PLACEHOLDER: replace with Ray Tatters' approved testimonial text before go-live.
-      quote: "[PLACEHOLDER: approved testimonial from Ray Tatters to be added]",
+      quote: "Heads of department receive automatic notifications when a document or task is due, so nothing gets missed. Our head greenkeeper uses a dedicated greens report module that lets them walk the course and record observations by voice. Every piece of equipment and club asset carries a QR code. Staff scan it on the spot to view the full service history, log an inspection or raise a fault, no going back to the office to update a spreadsheet. For any club that takes health and safety compliance seriously, I would strongly recommend ClubSentinel.",
       name: "Ray Tatters", role: "Chairman, Wearside Golf Club",
-      tag: "ClubSentinel", col: "var(--yellow)", placeholder: true,
+      tag: "ClubSentinel", col: "var(--yellow)",
     },
   ];
   return (
@@ -460,7 +459,7 @@ function Testimonials() {
         </div>
         <div className="tgrid">
           {items.map((t, i) => (
-            <div className={`tq${t.placeholder ? " tq-placeholder" : ""}`} key={i}>
+            <div className="tq" key={i}>
               <span className="tq-tag" style={{ "--pcol": t.col }}>{t.tag}</span>
               <blockquote>{t.quote}</blockquote>
               <div className="who">
@@ -518,6 +517,7 @@ function Footer() {
             <a href="#why">Why SentinelHQ</a>
             <a href="#customers">Customers</a>
             <a href="#book">Book a call</a>
+            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
           <div className="col">
             <h5>Trust</h5>

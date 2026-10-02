@@ -4,6 +4,8 @@
 export const SITE_URL = "https://sentinelhq.co.uk";
 export const LASTMOD = "2026-10-02";
 
+export const LINKEDIN = "https://www.linkedin.com/company/sentinelhq-uk/";
+
 export const REGISTERED_OFFICE =
   "SentinelHQ Limited, 32 Thornbridge, Washington, NE38 8TJ. Registered in England & Wales No. 17242389. ICO ZC175485.";
 
@@ -37,9 +39,7 @@ export const ORGANIZATION = {
     postalCode: "NE38 8TJ",
     addressCountry: "GB",
   },
-  // TODO: add the SentinelHQ LinkedIn company URL once confirmed.
-  // linkedin.com/company/sentinelhq belongs to an unrelated company, so it is not used.
-  sameAs: ["https://find-and-update.company-information.service.gov.uk/company/17242389"],
+  sameAs: [LINKEDIN, "https://find-and-update.company-information.service.gov.uk/company/17242389"],
 };
 
 const publisher = { "@id": ORG_ID };
