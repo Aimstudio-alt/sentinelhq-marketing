@@ -1,0 +1,9 @@
+# robots.txt — sentinelhq.co.uk
+User-agent: *
+Allow: /
+
+# Keep bundler/source artefacts out of the index if uploaded by mistake
+Disallow: /archive/
+Disallow: /design_handoff_sentinelhq_site/
+
+Sitemap: https://sentinelhq.co.uk/sitemap.xml
