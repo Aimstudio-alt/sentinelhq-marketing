@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/Aimstudio-alt/sentinelhq-marketing#readme",
   "devDependencies": {
+    "chrome-launcher": "^1.2.2",
     "esbuild": "^0.28.2",
+    "lighthouse": "^13.5.0",
     "playwright": "^1.63.0",
     "preact": "^11.0.0",
     "react": "^18.3.1",

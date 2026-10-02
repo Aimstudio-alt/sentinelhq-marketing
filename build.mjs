@@ -133,8 +133,11 @@ function footerLinks(currentPath) {
 }
 const FOOT_LEGAL = `<div class="foot-legal">© 2026 ${escText(REGISTERED_OFFICE)} Built in North East England · Hosted in the UK.</div>`;
 
+// Make in-page links to this site root-relative. Body only: canonical and
+// og:url in the head must stay absolute.
 function absolutiseSiteLinks(html) {
-  return html.replace(/href="https:\/\/sentinelhq\.co\.uk\//g, 'href="/');
+  const i = html.indexOf("<body");
+  return html.slice(0, i) + html.slice(i).replace(/href="https:\/\/sentinelhq\.co\.uk\//g, 'href="/');
 }
 
 // ── 4. hand-written pages ────────────────────────────────────────────────────
