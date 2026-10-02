@@ -92,7 +92,7 @@ function Booking() {
     const slot = `${bkDateLong(y, m - 1, d)} · ${bkFmtTime(selSlot.start)}`;
     setSending(true);
     try {
-      const res = await fetch("/api/book", {
+      const res = await fetch("/api/book/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
