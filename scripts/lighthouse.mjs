@@ -17,19 +17,21 @@ const pages = (opt("--pages") || "/,/clubsentinel/,/countyconsent/,/referencesen
 
 const chromeFlags = ["--headless=new", "--no-sandbox"];
 if (map) chromeFlags.push(`--host-resolver-rules=MAP ${new URL(base).hostname} ${map}`, "--ignore-certificate-errors");
-const chrome = await chromeLauncher.launch({
-  chromePath: process.env.CHROME_PATH || "C:/Program Files/Google/Chrome/Application/chrome.exe",
-  chromeFlags,
-});
 
 const pct = (c) => String(Math.round((c?.score ?? 0) * 100)).padStart(4);
 console.log("page".padEnd(22), "perf  seo  a11y   bp     LCP     TBT     CLS  failed SEO audits");
 for (const p of pages) {
+  // Fresh browser per page: a shared session can lose the preview auth cookie.
+  const chrome = await chromeLauncher.launch({
+    chromePath: process.env.CHROME_PATH || "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    chromeFlags,
+  });
   const { lhr } = await lighthouse(base + p, {
     port: chrome.port, output: "json", logLevel: "error",
     onlyCategories: ["performance", "seo", "accessibility", "best-practices"],
     extraHeaders: cookie ? { Cookie: cookie } : undefined,
   });
+  await chrome.kill();
   if (lhr.runtimeError) { console.log(p.padEnd(22), "ERROR", lhr.runtimeError.code); continue; }
   const a = lhr.audits;
   // Guard against measuring the wrong server (the old LiteSpeed bundle used blob: scripts).
@@ -40,4 +42,3 @@ for (const p of pages) {
     a["total-blocking-time"].displayValue.padStart(7), a["cumulative-layout-shift"].displayValue.padStart(7),
     " " + (failed || "-"), blob ? "  !! OLD SITE (blob: scripts)" : "");
 }
-await chrome.kill();
