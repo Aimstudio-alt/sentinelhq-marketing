@@ -1,99 +1,117 @@
-const FROM_EMAIL = 'noreply@sentinelhq.co.uk';
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'hello@sentinelhq.co.uk';
+// POST /api/book: booking form on the homepage (#book).
+// Validates the request, emails the booking to hello@sentinelhq.co.uk and sends
+// the visitor a short confirmation, both via Resend.
+// Env: RESEND_API_KEY (required), BOOKING_TO (optional, defaults to hello@).
 
-function escape(s) {
-  return String(s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#x27;');
+const FROM = "SentinelHQ <noreply@sentinelhq.co.uk>";
+const TO = process.env.BOOKING_TO || "hello@sentinelhq.co.uk";
+const PRODUCTS = ["", "ClubSentinel", "CountyConsent", "SportConsent", "ReferenceSentinel", "CareSentinel", "Not sure yet"];
+const EMAIL_RE = /^[^\s@<>()",;:]+@[^\s@<>()",;:]+\.[a-z]{2,}$/i;
+const PHONE_RE = /^[+()\d\s.-]{7,25}$/;
+
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+const clean = (v, max) => (typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f]/g, " ").trim().slice(0, max + 1) : "");
+
+export function validate(body) {
+  const f = {
+    name: clean(body.name, 100),
+    email: clean(body.email, 254),
+    phone: clean(body.phone, 25),
+    organisation: clean(body.organisation, 150),
+    product: clean(body.product, 40),
+    slot: clean(body.slot, 80),
+    slotIso: clean(body.slot_iso, 40),
+  };
+  const errors = [];
+  if (!f.name || f.name.length > 100) errors.push("name");
+  if (!EMAIL_RE.test(f.email) || f.email.length > 254) errors.push("email");
+  if (!PHONE_RE.test(f.phone)) errors.push("phone");
+  if (!f.organisation || f.organisation.length > 150) errors.push("organisation");
+  if (!PRODUCTS.includes(f.product)) errors.push("product");
+  const when = new Date(f.slotIso);
+  const now = Date.now();
+  if (!f.slot || f.slot.length > 80 || isNaN(when) || when < now || when - now > 120 * 864e5) errors.push("slot");
+  return { fields: f, errors };
 }
 
-async function sendEmail(payload) {
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
+async function send(payload) {
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
+  if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
   return res.json();
 }
 
+function adminEmail(f) {
+  const rows = [
+    ["Name", f.name], ["Organisation", f.organisation], ["Email", f.email], ["Phone", f.phone],
+    ["Product", f.product || "Not given"], ["Requested slot", f.slot], ["Slot (ISO, UTC)", f.slotIso],
+  ];
+  return {
+    from: FROM,
+    to: [TO],
+    reply_to: f.email,
+    subject: `Call booked: ${f.name}, ${f.organisation} (${f.slot})`,
+    text: `New call booking from sentinelhq.co.uk\n\n${rows.map(([k, v]) => `${k}: ${v}`).join("\n")}\n\nReply to this email to contact ${f.name} directly.`,
+    html: `<div style="font-family:system-ui,-apple-system,sans-serif;max-width:560px;color:#1b1a16">
+<h2 style="font-size:18px;margin:0 0 16px">New call booking from sentinelhq.co.uk</h2>
+<table style="border-collapse:collapse;font-size:14px;width:100%">${rows
+      .map(([k, v]) => `<tr><td style="padding:6px 12px 6px 0;color:#6b6b60;width:140px">${esc(k)}</td><td style="padding:6px 0">${esc(v)}</td></tr>`)
+      .join("")}</table>
+<p style="font-size:13px;color:#6b6b60;margin-top:20px">Reply to this email to contact ${esc(f.name)} directly.</p></div>`,
+  };
+}
+
+function visitorEmail(f) {
+  const first = f.name.split(/\s+/)[0];
+  return {
+    from: FROM,
+    to: [f.email],
+    reply_to: TO,
+    subject: `Your SentinelHQ call: ${f.slot}`,
+    text: `Hi ${first},\n\nThanks for booking a call with SentinelHQ. We have your request for ${f.slot} (UK time).\n\nWe'll confirm the time and send a video call link before we meet. If you need to change anything, just reply to this email.\n\nSentinelHQ\nhello@sentinelhq.co.uk\nhttps://sentinelhq.co.uk`,
+    html: `<div style="font-family:system-ui,-apple-system,sans-serif;max-width:560px;color:#1b1a16;font-size:15px;line-height:1.55">
+<p>Hi ${esc(first)},</p>
+<p>Thanks for booking a call with SentinelHQ. We have your request for <b>${esc(f.slot)}</b> (UK time).</p>
+<p>We'll confirm the time and send a video call link before we meet. If you need to change anything, just reply to this email.</p>
+<p style="margin-top:24px">SentinelHQ<br><a href="mailto:hello@sentinelhq.co.uk" style="color:#2d6a45">hello@sentinelhq.co.uk</a><br><a href="https://sentinelhq.co.uk" style="color:#2d6a45">sentinelhq.co.uk</a></p></div>`,
+  };
+}
+
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    return res.status(405).json({ error: "Method not allowed." });
+  }
+  const body = typeof req.body === "object" && req.body ? req.body : {};
+
+  // Honeypot: bots fill the hidden field. Pretend success, send nothing.
+  if (typeof body.company_website === "string" && body.company_website.trim()) {
+    return res.status(200).json({ ok: true });
   }
 
-  const { name, email, phone, org, product, when } = req.body || {};
-
-  if (!name || !email || !org || !when) {
-    return res.status(400).json({ error: 'Missing required fields' });
+  const { fields, errors } = validate(body);
+  if (errors.length) {
+    return res.status(400).json({ error: "Please check your details and chosen time.", fields: errors });
   }
-
-  const safeName = escape(name);
-  const safeEmail = escape(email);
-  const safePhone = phone ? escape(phone) : '—';
-  const safeOrg = escape(org);
-  const safeProduct = product ? escape(product) : 'SentinelHQ';
-  const safeWhen = escape(when);
-
-  try {
-    await sendEmail({
-      from: FROM_EMAIL,
-      to: [email],
-      subject: `Your SentinelHQ strategy call — ${safeWhen}`,
-      html: `
-        <div style="font-family:-apple-system,sans-serif;max-width:560px;margin:0 auto;color:#111827;">
-          <div style="background:#10263b;padding:24px;border-radius:12px 12px 0 0;">
-            <h1 style="color:#c9a84c;margin:0;font-size:20px;font-weight:700;">SentinelHQ</h1>
-          </div>
-          <div style="background:#f9fafb;padding:32px;border-radius:0 0 12px 12px;border:1px solid #e5e7eb;border-top:none;">
-            <h2 style="color:#111827;font-size:22px;margin:0 0 12px;">You're booked in, ${safeName}.</h2>
-            <p style="color:#4b5563;line-height:1.6;margin:0 0 20px;">
-              We've confirmed your strategy call for <strong>${safeOrg}</strong>. Here are the details:
-            </p>
-            <div style="background:white;border:1px solid #e5e7eb;border-radius:8px;padding:16px 20px;margin:0 0 20px;">
-              <p style="margin:0 0 8px;color:#374151;"><strong>When:</strong> ${safeWhen}</p>
-              <p style="margin:0;color:#374151;"><strong>Platform:</strong> ${safeProduct}</p>
-            </div>
-            <p style="color:#4b5563;line-height:1.6;margin:0 0 24px;">
-              We'll send you a video call link before the session. If you need to reschedule, just reply to this email.
-            </p>
-            <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
-            <p style="color:#9ca3af;font-size:13px;margin:0;">SentinelHQ — purpose-built compliance platforms for regulated sectors</p>
-          </div>
-        </div>
-      `,
-    });
-  } catch (e) {
-    console.error('[book] Confirmation email failed:', e);
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[book] RESEND_API_KEY is not set");
+    return res.status(500).json({ error: "Booking is temporarily unavailable." });
   }
 
   try {
-    await sendEmail({
-      from: FROM_EMAIL,
-      to: [ADMIN_EMAIL],
-      subject: `Strategy call booked: ${safeName} — ${safeOrg} — ${safeWhen}`,
-      html: `
-        <div style="font-family:-apple-system,sans-serif;max-width:560px;margin:0 auto;">
-          <h2 style="color:#111827;">New SentinelHQ strategy call booking</h2>
-          <table style="width:100%;border-collapse:collapse;font-size:14px;">
-            <tr><td style="padding:8px 0;color:#6b7280;width:130px;">Name</td><td style="padding:8px 0;color:#111827;font-weight:600;">${safeName}</td></tr>
-            <tr><td style="padding:8px 0;color:#6b7280;">Organisation</td><td style="padding:8px 0;color:#111827;font-weight:600;">${safeOrg}</td></tr>
-            <tr><td style="padding:8px 0;color:#6b7280;">Email</td><td style="padding:8px 0;color:#111827;"><a href="mailto:${safeEmail}">${safeEmail}</a></td></tr>
-            <tr><td style="padding:8px 0;color:#6b7280;">Phone</td><td style="padding:8px 0;color:#111827;">${safePhone}</td></tr>
-            <tr><td style="padding:8px 0;color:#6b7280;">When</td><td style="padding:8px 0;color:#111827;font-weight:600;">${safeWhen}</td></tr>
-            <tr><td style="padding:8px 0;color:#6b7280;">Platform</td><td style="padding:8px 0;color:#111827;">${safeProduct}</td></tr>
-          </table>
-        </div>
-      `,
-    });
+    await send(adminEmail(fields));
   } catch (e) {
-    console.error('[book] Admin notification failed:', e);
+    console.error("[book] admin email failed:", e.message);
+    return res.status(502).json({ error: "We couldn't send your booking." });
   }
-
-  return res.status(200).json({ success: true });
+  try {
+    await send(visitorEmail(fields));
+  } catch (e) {
+    // The booking reached us; a failed confirmation shouldn't fail the request.
+    console.error("[book] confirmation email failed:", e.message);
+  }
+  return res.status(200).json({ ok: true });
 }

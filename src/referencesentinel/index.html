@@ -182,30 +182,18 @@ h1,h2,h3,h4{margin:0;font-weight:400;}
 .gcard .l{font:600 12px/1 var(--sans);margin-top:6px;}
 .gcard p{font-size:13px;color:var(--muted);margin:10px 0 0;line-height:1.5;}
 
-/* comparison table */
-.ctable{margin-top:44px;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;}
-.ctable table{width:100%;border-collapse:collapse;}
-.ctable th,.ctable td{text-align:left;padding:13px 18px;border-bottom:1px solid var(--line-2);font-size:14px;}
-.ctable thead th{font:700 10px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--soft);background:color-mix(in oklab,var(--cream) 55%,var(--card));}
-.ctable th.us,.ctable td.us{background:color-mix(in oklab,var(--accent) 8%,var(--card));}
-.ctable td.us{font-weight:600;color:var(--accent-ink);}
-.ctable td:first-child{font-weight:600;color:var(--ink);}
-.ctable .yes{color:color-mix(in oklab,var(--green) 70%,var(--ink));font-weight:700;}
-.ctable .no{color:var(--soft);}
-.ctable tr:last-child td{border-bottom:none;}
 
 /* pricing */
-.ptiers{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px;}
-.ptier{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;text-align:center;}
-.ptier.best{border-color:color-mix(in oklab,var(--accent) 50%,var(--line));box-shadow:0 0 0 1px color-mix(in oklab,var(--accent) 30%,transparent);}
-.ptier .vol{font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--soft);}
-.ptier .amt{font-family:var(--serif);font-size:38px;letter-spacing:-.02em;margin:12px 0 2px;}
-.ptier .per{font:500 11px/1 var(--mono);color:var(--soft);}
-.ptier .eg{font-size:12.5px;color:var(--muted);margin-top:10px;}
-.ptier .flag{display:inline-block;margin-top:12px;font:600 9.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink);background:color-mix(in oklab,var(--accent) 18%,transparent);padding:4px 8px;border-radius:5px;}
-.pincl{max-width:720px;margin:26px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.pincl li{list-style:none;position:relative;padding-left:26px;font-size:14.5px;color:var(--ink-2);}
-.pincl li::before{content:"✓";position:absolute;left:0;color:var(--cta);font-weight:700;}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:44px;max-width:920px;margin-inline:auto;}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px;display:flex;flex-direction:column;}
+.plan.best{border-color:color-mix(in oklab,var(--accent) 50%,var(--line));box-shadow:0 0 0 1px color-mix(in oklab,var(--accent) 30%,transparent);}
+.plan .vol{font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--soft);}
+.plan h3{font-family:var(--serif);font-weight:400;font-size:30px;letter-spacing:-.02em;margin:12px 0 8px;}
+.plan .pdesc{font-size:14.5px;color:var(--muted);margin:0 0 16px;}
+.plan .plist{margin:0 0 24px;padding:0;display:grid;gap:9px;flex:1;align-content:start;}
+.plan .plist li{list-style:none;position:relative;padding-left:24px;font-size:14px;color:var(--ink-2);}
+.plan .plist li::before{content:"✓";position:absolute;left:0;color:var(--cta);font-weight:700;}
+.plan .btn{align-self:flex-start;}
 .pcta{text-align:center;margin-top:32px;}
 .pnote{font:500 12.5px/1 var(--mono);color:var(--soft);margin-top:14px;}
 
@@ -256,15 +244,12 @@ footer.foot{padding:56px 0 40px;border-top:1px solid var(--line-2);background:va
   .two{grid-template-columns:1fr;}
   .aigrid{grid-template-columns:1fr 1fr;}
   .ggrid{grid-template-columns:1fr 1fr;}
-  .ptiers{grid-template-columns:1fr 1fr;}
   .nav-mid{display:none;}
   .finale{margin:0 16px;}
-  .ctable{overflow-x:auto;}
-  .ctable table{min-width:560px;}
 }
 @media(max-width:520px){
   .display{font-size:33px;}
-  .steps,.aigrid,.ggrid,.ptiers,.pincl{grid-template-columns:1fr;}
+  .steps,.aigrid,.ggrid,.plans{grid-template-columns:1fr;}
   .sc-stats{grid-template-columns:1fr 1fr;}
   .hero-cta .btn{width:100%;justify-content:center;}
 }
@@ -287,7 +272,7 @@ footer.foot{padding:56px 0 40px;border-top:1px solid var(--line-2);background:va
     </nav>
     <div class="nav-right">
       <a class="back" href="https://sentinelhq.co.uk/">← All products</a>
-      <a class="btn btn-primary" href="https://referencesentinel.co.uk/signup">Get started free</a>
+      <a class="btn btn-primary" href="https://referencesentinel.co.uk/book-demo">Book a demo</a>
     </div>
   </div>
 </header>
@@ -300,13 +285,13 @@ footer.foot{padding:56px 0 40px;border-top:1px solid var(--line-2);background:va
       <h1 class="display">Reference checks without the chase.</h1>
       <p class="lead">Send the request — ReferenceSentinel reaches every referee, verifies each response with AI, and hands you a signed report and a permanent audit trail. You don't lift a finger.</p>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="https://referencesentinel.co.uk/signup">Get started free <span class="arrow">→</span></a>
-        <a class="btn btn-ghost" href="#how">See how it works</a>
+        <a class="btn btn-primary" href="https://referencesentinel.co.uk/book-demo">Book a demo <span class="arrow">→</span></a>
+        <a class="btn btn-ghost" href="https://referencesentinel.co.uk/signup">Start free</a>
       </div>
       <div class="hero-badges">
-        <span class="pill"><span class="dot"></span> No subscription</span>
         <span class="pill"><span class="dot"></span> Credits never expire</span>
-        <span class="pill"><span class="dot"></span> 5 free to start</span>
+        <span class="pill"><span class="dot"></span> Unlimited users</span>
+        <span class="pill"><span class="dot"></span> Free credits on signup</span>
       </div>
     </div>
     <div class="scorecard" aria-label="Example candidates dashboard">
@@ -411,59 +396,47 @@ footer.foot{padding:56px 0 40px;border-top:1px solid var(--line-2);background:va
   </div>
 </section>
 
-<!-- COMPARISON -->
-<section style="background:color-mix(in oklab,var(--blue) 7%,var(--cream));padding-top:64px;">
-  <div class="wrap">
-    <div class="intro center">
-      <span class="eyebrow">How we compare</span>
-      <h2 class="h2">Transparent pricing. No demos, no sales calls.</h2>
-    </div>
-    <div class="ctable reveal">
-      <table>
-        <thead><tr><th>Feature</th><th class="us">ReferenceSentinel</th><th>Other platforms</th></tr></thead>
-        <tbody>
-          <tr><td>Price per reference</td><td class="us">From £7.99</td><td>From £14.99</td></tr>
-          <tr><td>No subscription required</td><td class="us"><span class="yes">✓</span> credits never expire</td><td class="no">✗</td></tr>
-          <tr><td>Refund on non-response</td><td class="us"><span class="yes">✓</span> automatic</td><td class="no">✗</td></tr>
-          <tr><td>Email bounce refund</td><td class="us"><span class="yes">✓</span> instant</td><td class="no">✗</td></tr>
-          <tr><td>Mixed reference types</td><td class="us"><span class="yes">✓</span></td><td class="no">✗</td></tr>
-          <tr><td>Care-sector question profile</td><td class="us"><span class="yes">✓</span> CQC-aligned</td><td class="no">✗</td></tr>
-          <tr><td>AI fraud &amp; red-flag detection</td><td class="us"><span class="yes">✓</span></td><td class="no">✗</td></tr>
-          <tr><td>Bulk candidate management</td><td class="us"><span class="yes">✓</span></td><td class="no">✗</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="micro" style="text-align:center;margin-top:16px;">Competitor pricing and features based on publicly available information, May 2026.</p>
-  </div>
-</section>
-
 <!-- PRICING -->
 <section id="pricing">
   <div class="wrap">
     <div class="intro center">
       <span class="eyebrow">Pricing</span>
-      <h2 class="h2">Pay as you go. Nothing more.</h2>
-      <p class="lead">No subscription. One credit = one candidate (up to 5 references). Credits never expire — the more you buy, the less you pay per check.</p>
+      <h2 class="h2">Simple pricing, sized to your agency.</h2>
+      <p class="lead">We don't publish a fixed price list. Every agency's volume and workforce compliance needs are different, so we quote a rate that fits. Book a 30-minute demo and we'll walk through it, no obligation.</p>
     </div>
-    <div class="ptiers">
-      <div class="ptier reveal"><div class="vol">5–19 credits</div><div class="amt">£11.99</div><div class="per">/ credit</div><div class="eg">10 credits = £119.90</div><div class="flag">Self-service</div></div>
-      <div class="ptier reveal"><div class="vol">20–49 credits</div><div class="amt">£9.99</div><div class="per">/ credit</div><div class="eg">20 credits = £199.80</div><div class="flag">Self-service</div></div>
-      <div class="ptier reveal"><div class="vol">50–99 credits</div><div class="amt">£8.99</div><div class="per">/ credit</div><div class="eg">50 credits = £449.50</div><div class="flag">Free setup</div></div>
-      <div class="ptier best reveal"><div class="vol">100+ credits</div><div class="amt">£7.99</div><div class="per">/ credit</div><div class="eg">100 credits = £799.00</div><div class="flag">Best rate</div></div>
+    <div class="plans">
+      <div class="plan best reveal">
+        <div class="vol">Full platform</div>
+        <h3>Compliance Suite</h3>
+        <p class="pdesc">One monthly plan per agency, with reference credits included every month. Referencing plus the full workforce compliance platform.</p>
+        <ul class="plist">
+          <li>Right to Work &amp; DBS tracking, including expiry dates and Update Service checks</li>
+          <li>Training records &amp; document vault with renewal tracking</li>
+          <li>Live readiness scoring, sign-off gate &amp; compliance dashboard</li>
+          <li>Shift booking with a compliance gate: hard stops on expired RTW/DBS or missing sign-off</li>
+          <li>Client-safe activity reports for audit evidence</li>
+          <li>Unlimited users</li>
+          <li>Everything in Pay as you go</li>
+        </ul>
+        <a class="btn btn-primary" href="https://referencesentinel.co.uk/book-demo">Book a demo <span class="arrow">→</span></a>
+      </div>
+      <div class="plan reveal">
+        <div class="vol">Referencing only</div>
+        <h3>Pay as you go</h3>
+        <p class="pdesc">No subscription and no fixed bundles. Buy reference credits whenever you need them; the rate improves the more you buy in one go.</p>
+        <ul class="plist">
+          <li>1 credit = 1 candidate, up to 5 referees</li>
+          <li>AI fraud detection &amp; red-flag alerts on every submission</li>
+          <li>Structured, branded PDF report, permanently logged</li>
+          <li>No-response &amp; email-bounce credit protection</li>
+          <li>Credits never expire</li>
+          <li>Free credits on signup, no card required</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://referencesentinel.co.uk/signup">Start free <span class="arrow">→</span></a>
+      </div>
     </div>
-    <ul class="pincl">
-      <li>Up to 5 referees per candidate</li>
-      <li>Mixed professional &amp; character types</li>
-      <li>AI fraud detection on every report</li>
-      <li>Structured PDF report, permanently logged</li>
-      <li>No-response &amp; email-bounce protection</li>
-      <li>Care-sector question profiles included</li>
-      <li>Bulk management, chases &amp; CSV export</li>
-      <li>Credits never expire — no subscription</li>
-    </ul>
     <div class="pcta">
-      <a class="btn btn-primary" href="https://referencesentinel.co.uk/signup">Get started free <span class="arrow">→</span></a>
-      <div class="pnote">5 FREE CREDITS TO START · NO CARD REQUIRED</div>
+      <div class="pnote">FREE CREDITS ON SIGNUP · NO CARD REQUIRED</div>
     </div>
   </div>
 </section>
@@ -474,7 +447,7 @@ footer.foot{padding:56px 0 40px;border-top:1px solid var(--line-2);background:va
     <div class="intro center"><span class="eyebrow">Questions</span><h2 class="h2">Frequently asked questions</h2></div>
     <div class="faq">
       <details open><summary>What is ReferenceSentinel?</summary><p>An automated employment reference checking platform for UK recruitment agencies. You send a request, your candidate nominates their referees, each referee completes a structured questionnaire, and the results land in your dashboard with AI summaries, three-layer fraud detection and a printable reference pack.</p></details>
-      <details><summary>How does pricing work?</summary><p>Pay-as-you-go with no subscription, and credits never expire. One credit covers one candidate including up to five referees. Prices fall from £11.99 each to £7.99 at 100+ credits, so 50 credits works out at £449.50. New accounts start with 5 free credits, no card required.</p></details>
+      <details><summary>How does pricing work?</summary><p>There are two ways to pay. The Compliance Suite is one monthly plan per agency, covering referencing plus workforce compliance (Right to Work and DBS tracking, training vault, readiness scoring and a shift booking compliance gate), with reference credits included every month and unlimited users. Pay as you go is referencing only: buy credits when you need them, with no subscription. One credit covers one candidate and up to five referees, and credits never expire. We don't publish a fixed price list, so book a demo and we'll quote a rate that fits your volume.</p></details>
       <details><summary>What happens if a referee never responds?</summary><p>You're not charged for incomplete checks. Credits are automatically refunded if a candidate doesn't nominate referees within 14 days, or a referee doesn't respond within 21 days. Automated reminders nudge things along, and an email bounce triggers an instant refund.</p></details>
       <details><summary>How does the fraud detection work?</summary><p>Every submission runs through three independent checks automatically: AI stylometric analysis, same-IP detection and Companies House employer verification — alongside rule-based checks like employment-date gaps. Anything suspicious is surfaced clearly, and you can dismiss false positives or override AI assessments with a full audit trail.</p></details>
       <details><summary>Can I customise the reference questions?</summary><p>Yes. Build question profiles tailored to a role or sector, or let the AI generate one from a job description in seconds. Care-sector profiles are CQC-aligned and included as standard.</p></details>
@@ -488,10 +461,10 @@ footer.foot{padding:56px 0 40px;border-top:1px solid var(--line-2);background:va
   <div class="finale">
     <span class="cb cb1"></span><span class="cb cb2"></span>
     <h2 class="h2">Stop chasing referees. <em>Start placing faster.</em></h2>
-    <p>A 14-day pilot, configured for your workflow. No card, no contract, no commitment.</p>
+    <p>A 30-minute demo on a live system, sized to your agency. No pressure, no obligation.</p>
     <div class="hero-cta">
-      <a class="btn btn-primary" href="https://referencesentinel.co.uk/signup">Get started free <span class="arrow">→</span></a>
-      <a class="btn btn-ghost" href="https://referencesentinel.co.uk/login">Sign in</a>
+      <a class="btn btn-primary" href="https://referencesentinel.co.uk/book-demo">Book a demo <span class="arrow">→</span></a>
+      <a class="btn btn-ghost" href="https://referencesentinel.co.uk/signup">Start free</a>
     </div>
   </div>
 </section>
@@ -507,18 +480,18 @@ footer.foot{padding:56px 0 40px;border-top:1px solid var(--line-2);background:va
         <a href="https://sentinelhq.co.uk/">All products</a>
         <a href="https://referencesentinel.co.uk">ReferenceSentinel site</a>
         <a href="https://sentinelhq.co.uk/legal.html">Legal</a>
-        <a href="/cdn-cgi/l/email-protection#81e9e4ededeec1f2e4eff5e8efe4ede9f0afe2eeaff4ea">Contact</a>
+        <a href="mailto:hello@sentinelhq.co.uk">Contact</a>
       </div>
     </div>
     <div class="foot-legal">© 2026 SentinelHQ Limited · Registered in England &amp; Wales (No. 17242389) · ICO ZC175485 · Built in North East England · Hosted in the UK</div>
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 (function(){
   if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   document.body.classList.add('jsa');
-  document.querySelectorAll('.intro, .step, .feat, .ai, .gcard, .ptier, .ctable, .scorecard, .quote').forEach(function(el){ el.classList.add('reveal'); });
+  document.querySelectorAll('.intro, .step, .feat, .ai, .gcard, .plan, .scorecard, .quote').forEach(function(el){ el.classList.add('reveal'); });
   function countUp(el){
     var target = parseInt(el.getAttribute('data-target') || el.textContent, 10) || 0;
     el.setAttribute('data-target', target);

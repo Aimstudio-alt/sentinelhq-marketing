@@ -151,7 +151,7 @@ h1,h2,h3,h4{margin:0;font-weight:400;}
 .intro .lead{margin-top:16px;}
 
 /* stats bar */
-.statbar{background:linear-gradient(135deg,#0a2818,#155230 60%,#0f3d24);border-radius:20px;display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden;box-shadow:0 24px 60px -30px rgba(10,40,24,.5);}
+.statbar{background:linear-gradient(135deg,#0a2818,#155230 60%,#0f3d24);border-radius:20px;display:grid;grid-template-columns:repeat(2,1fr);overflow:hidden;box-shadow:0 24px 60px -30px rgba(10,40,24,.5);}
 .statbar .st{padding:28px 26px;border-right:1px solid rgba(255,255,255,.1);}
 .statbar .st:last-child{border-right:none;}
 .statbar .v{font-family:var(--serif);font-size:44px;line-height:1;color:#fff;letter-spacing:-.02em;}
@@ -259,7 +259,6 @@ footer.foot{padding:56px 0 40px;border-top:1px solid var(--line-2);background:va
   .hero .lead{max-width:none;}
   .statbar{grid-template-columns:1fr 1fr;}
   .statbar .st:nth-child(2){border-right:none;}
-  .statbar .st:nth-child(1),.statbar .st:nth-child(2){border-bottom:1px solid rgba(255,255,255,.1);}
   .risks{grid-template-columns:1fr;}
   .steps{grid-template-columns:1fr;}
   .fgrid{grid-template-columns:1fr 1fr;}
@@ -339,10 +338,8 @@ footer.foot{padding:56px 0 40px;border-top:1px solid var(--line-2);background:va
 <!-- STATS -->
 <div class="wrap">
   <div class="statbar reveal">
-    <div class="st"><div class="v">39</div><div class="l">County unions in England</div><div class="sub">plus 1,900+ affiliated golf clubs</div></div>
     <div class="st"><div class="v">£17.5m</div><div class="l">Maximum GDPR fine</div><div class="sub">for data protection failures</div></div>
     <div class="st"><div class="v">30</div><div class="l">Days to respond</div><div class="sub">to any subject access request</div></div>
-    <div class="st"><div class="v">100%</div><div class="l">SafeGolf required</div><div class="sub">for all affiliated counties</div></div>
   </div>
 </div>
 
@@ -373,29 +370,6 @@ footer.foot{padding:56px 0 40px;border-top:1px solid var(--line-2);background:va
         <h3>ICO investigation readiness</h3>
         <p>"What if the ICO asks to see your data handling records and you're running on paper forms, shared email threads and spreadsheets?"</p>
       </div>
-    </div>
-    <div class="safegolf reveal">
-      <div class="big"><span>SafeGolf accreditation is now mandatory</span> for all England Golf affiliated counties. Digital, auditable consent management is no longer optional — it's a requirement.</div>
-      <a class="btn btn-gold" href="https://countyconsent.co.uk/demo">See how we help <span class="arrow">→</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section id="how" style="background:var(--card);">
-  <div class="wrap">
-    <div class="intro center">
-      <span class="eyebrow" style="justify-content:center;display:flex;">How it works</span>
-      <h2 class="h2">From register to roadtrip in six steps</h2>
-      <p class="lead">From setting up your organisation to the moment you board the coach — the whole flow, without a single sheet of paper.</p>
-    </div>
-    <div class="steps">
-      <div class="step reveal"><div class="n">01</div><div class="lbl">Team</div><h3>Invite your team managers</h3><p>Add the staff who'll run your trips. Each manager gets an invite link and sets their own password — no shared logins.</p></div>
-      <div class="step reveal"><div class="n">02</div><div class="lbl">Register</div><h3>Build your junior register</h3><p>Add junior golfers once — in bulk via CSV or individually. They're then available for any trip.</p></div>
-      <div class="step reveal"><div class="n">03</div><div class="lbl">Plan</div><h3>Create a trip, assign managers</h3><p>Set up an away trip or tournament in seconds — venue, dates, and the managers travelling.</p></div>
-      <div class="step reveal"><div class="n">04</div><div class="lbl">Notify</div><h3>Add golfers, send requests</h3><p>Select golfers from your register; each parent automatically receives a unique secure consent link.</p></div>
-      <div class="step reveal"><div class="n">05</div><div class="lbl">Consent</div><h3>Parents complete it digitally</h3><p>Medical info, emergency contacts and consent from any device — no printing, no chasing, no missing paperwork.</p></div>
-      <div class="step reveal"><div class="n">06</div><div class="lbl">Go</div><h3>Staff have everything on the day</h3><p>Instant access to medical summaries, emergency contacts and full consent records — online or offline.</p></div>
     </div>
   </div>
 </section>
@@ -460,7 +434,7 @@ footer.foot{padding:56px 0 40px;border-top:1px solid var(--line-2);background:va
     <div class="ptiers">
       <div class="ptier reveal">
         <div class="vol">Golf Club</div>
-        <div class="amt">£99</div><span class="per">/ month</span>
+        <div class="amt">£65</div><span class="per">/ month</span>
         <p class="desc">For a single club managing its own junior members.</p>
         <a class="btn btn-primary" href="https://countyconsent.co.uk/signup">Get started →</a>
         <ul>

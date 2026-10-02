@@ -1,0 +1,32 @@
+{
+  "name": "sentinelhq-marketing",
+  "version": "1.0.0",
+  "description": "sentinelhq.co.uk marketing site",
+  "scripts": {
+    "build": "node build.mjs",
+    "og-image": "node scripts/og-image.mjs",
+    "icons": "node scripts/icons.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aimstudio-alt/sentinelhq-marketing.git"
+  },
+  "author": "",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Aimstudio-alt/sentinelhq-marketing/issues"
+  },
+  "homepage": "https://github.com/Aimstudio-alt/sentinelhq-marketing#readme",
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "playwright": "^1.63.0",
+    "preact": "^11.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sharp": "^0.35.5"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
+}
