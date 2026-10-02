@@ -316,17 +316,17 @@ function ProductMock({ kind }) {
       reference: {
         head: ["WORKER · J. OKAFOR", "ACCEPTED · CHASING 1"],
         segs: [["ID", 100], ["DBS", 100], ["Refs", 60], ["Training", 100], ["Sign-off", 0]],
-        rows: [["Reference 1 · previous employer", "Scored 4.6 · no flags"], ["Reference 2 · uploaded (email)", "Counted · manual"], ["Reference 3 · awaiting referee", "Chased 04 Jul · auto"]],
+        rows: [["Reference 1 · previous employer", "Scored 4.6 · no flags"], ["Reference 2 · uploaded (email)", "Counted · manual"], ["Reference 3 · awaiting referee", "Chased today · auto"]],
       },
       county: {
         head: ["JUNIOR · A. PATEL (U14)", "READY · RENEWAL 21d"],
         segs: [["Consent", 100], ["Medical", 100], ["Photo", 100], ["Coach DBS", 100], ["Season", 60]],
-        rows: [["Parental consent", "Signed 02 Apr · guardian"], ["Medical & dietary", "Nut allergy noted"], ["Photography", "Permitted · club use"]],
+        rows: [["Parental consent", "Signed 2 days ago · guardian"], ["Medical & dietary", "Nut allergy noted"], ["Photography", "Permitted · club use"]],
       },
       sport: {
         head: ["CLUB · RIVERSIDE RFC", "3 OPEN · NGB VIEW"],
         segs: [["Consent", 100], ["DBS", 80], ["Training", 100], ["Incidents", 60], ["Policy", 100]],
-        rows: [["Safeguarding lead", "DBS valid · trained"], ["Incident #24-07", "Escalated to NGB"], ["Volunteer DBS", "2 renewals due 30d"]],
+        rows: [["Safeguarding lead", "DBS valid · trained"], ["Incident #147", "Escalated to NGB"], ["Volunteer DBS", "2 renewals due 30d"]],
       },
     }[kind];
     return (
