@@ -6,7 +6,7 @@
   --lp-paper:#f7f7f2; --lp-surface:#fff; --lp-sunk:#eeefe6;
   --lp-ink:#14201a; --lp-ink-2:#3a463f; --lp-ink-3:#59645d; --lp-ink-4:#646f68;
   --lp-rule:#dfe1d6; --lp-rule-2:#d2d5c8;
-  --lp-serif:"Source Serif 4",Georgia,serif; --lp-sans:"Public Sans",system-ui,sans-serif; --lp-mono:"Public Sans",system-ui,sans-serif;
+  --lp-serif:"Source Serif 4","Source Serif 4 Fallback",Georgia,serif; --lp-sans:"Public Sans","Public Sans Fallback",system-ui,sans-serif; --lp-mono:"Public Sans","Public Sans Fallback",system-ui,sans-serif;
   min-height:0;
 }
 .lp-shell{min-height:0}

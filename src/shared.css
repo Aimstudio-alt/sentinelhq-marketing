@@ -1,5 +1,5 @@
 /* SentinelHQ design system: tokens, base, buttons, nav, footer. Shared by every page. */
-:root{--light:#f7f7f2;--light-2:#eeefe6;--white:#fff;--dark:#0e2219;--dark-2:#163327;--ink:#14201a;--ink-2:#3a463f;--muted:#59645d;--line:#dfe1d6;--line-d:rgba(255,255,255,.12);--green:#1f6b45;--green-h:#18573a;--fair:#8fd0a8;--gold:#d6a63a;--on-d:#eef1e8;--on-d-2:#b9c4bb;--ok-bg:#e2f1e7;--ok:#1d6a43;--due-bg:#fbf0d0;--due:#6b4e00;--bad-bg:#fbe3e0;--bad:#9b2c22;--c-club:#c99418;--c-county:#1f6b45;--c-sport:#6d55d6;--c-ref:#3667cf;--c-care:#2b8a8a;--serif:"Source Serif 4",Georgia,serif;--sans:"Public Sans",system-ui,sans-serif}
+:root{--light:#f7f7f2;--light-2:#eeefe6;--white:#fff;--dark:#0e2219;--dark-2:#163327;--ink:#14201a;--ink-2:#3a463f;--muted:#59645d;--line:#dfe1d6;--line-d:rgba(255,255,255,.12);--green:#1f6b45;--green-h:#18573a;--fair:#8fd0a8;--gold:#d6a63a;--on-d:#eef1e8;--on-d-2:#b9c4bb;--ok-bg:#e2f1e7;--ok:#1d6a43;--due-bg:#fbf0d0;--due:#6b4e00;--bad-bg:#fbe3e0;--bad:#9b2c22;--c-club:#c99418;--c-county:#1f6b45;--c-sport:#6d55d6;--c-ref:#3667cf;--c-care:#2b8a8a;--serif:"Source Serif 4","Source Serif 4 Fallback",Georgia,serif;--sans:"Public Sans","Public Sans Fallback",system-ui,sans-serif}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{background:var(--light);color:var(--ink);font:400 17px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
