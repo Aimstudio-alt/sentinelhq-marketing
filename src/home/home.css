@@ -15,19 +15,10 @@ h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.022em;line-he
 
 /* hero */
 .hero{background:var(--dark);color:var(--on-d);padding:72px 0 104px}
-.hero>.w{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:64px;align-items:start}
-.hero h1{font-size:58px;color:#fff;margin-top:18px;max-width:16ch}
+.hero>.w{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:64px;align-items:center}
+.hero h1{font-size:58px;color:#fff;margin-top:18px;max-width:20ch}
 .hero .sub{font-size:20px;color:var(--on-d-2);margin-top:22px;max-width:44ch}
 .hero .cta{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:30px}
-.moment{margin-top:48px;display:grid;grid-template-columns:minmax(0,.9fr) 40px minmax(0,1.1fr);align-items:center;gap:0}
-.arrow{display:grid;place-items:center;color:var(--fair);font-size:22px}
-.vn{background:var(--dark-2);border:1px solid var(--line-d);border-radius:12px;padding:18px}
-.vn .vh{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--on-d-2)}
-.vn .mic{width:30px;height:30px;border-radius:50%;background:#c0392b;display:grid;place-items:center;flex:none}
-.vn .mic::after{content:"";width:9px;height:9px;border-radius:2px;background:#fff}
-.wave{display:flex;gap:3px;align-items:center;height:34px;margin:14px 0 12px}
-.wave i{display:block;width:3px;border-radius:2px;background:var(--fair)}
-.vn q{display:block;font-size:14.5px;line-height:1.5;color:var(--on-d);quotes:none}
 
 /* shared product UI */
 .ui{background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden;color:var(--ink);box-shadow:0 20px 44px -30px rgba(14,34,25,.45);text-align:left}
@@ -185,7 +176,7 @@ section{padding:112px 0}
 @media(max-width:860px){
  .w{padding:0 20px}
  .hero{padding:44px 0 64px}.hero>.w{grid-template-columns:1fr;gap:44px}.hero h1{font-size:38px}.hero .sub{font-size:18px}
- .hero .cta .btn{width:100%}.moment{grid-template-columns:1fr;gap:10px;margin-top:36px}.arrow{transform:rotate(90deg);height:28px}
+ .hero .cta .btn{width:100%}
  .lead-form{padding:24px 20px}.checks{grid-template-columns:1fr}.f .two{grid-template-columns:1fr}
  section{padding:72px 0}.hd h2{font-size:33px}.hd p{font-size:17.5px}
  .steps{grid-template-columns:1fr;margin-top:40px}.step .vis{min-height:0}.accountable{font-size:18px;flex-direction:column;margin-top:40px}
