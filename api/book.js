@@ -1,6 +1,8 @@
-// POST /api/book: booking form on the homepage (#book).
-// Validates the request, emails the booking to hello@sentinelhq.co.uk and sends
-// the visitor a short confirmation, both via Resend.
+// POST /api/book: the homepage's two forms.
+//   type "booking" (default): "Book a call" calendar (#book)
+//   type "demo": hero "Request a demo" form
+// Validates the request, emails it to hello@sentinelhq.co.uk and sends the visitor
+// a short confirmation, both via Resend.
 // Env: RESEND_API_KEY (required), BOOKING_TO (optional, defaults to hello@).
 
 const FROM = "SentinelHQ <noreply@sentinelhq.co.uk>";
@@ -31,6 +33,26 @@ export function validate(body) {
   const when = new Date(f.slotIso);
   const now = Date.now();
   if (!f.slot || f.slot.length > 80 || isNaN(when) || when < now || when - now > 120 * 864e5) errors.push("slot");
+  return { fields: f, errors };
+}
+
+export function validateDemo(body) {
+  const f = {
+    email: clean(body.email, 254),
+    first: clean(body.first_name, 60),
+    last: clean(body.last_name, 60),
+    organisation: clean(body.organisation, 150),
+    phone: clean(body.phone, 25),
+    products: Array.isArray(body.products) ? body.products.slice(0, 6).map((x) => clean(x, 40)) : [],
+  };
+  const errors = [];
+  if (!EMAIL_RE.test(f.email) || f.email.length > 254) errors.push("email");
+  if (!f.first || f.first.length > 60) errors.push("first_name");
+  if (!f.last || f.last.length > 60) errors.push("last_name");
+  if (!f.organisation || f.organisation.length > 150) errors.push("organisation");
+  if (f.phone && !PHONE_RE.test(f.phone)) errors.push("phone");
+  if (f.products.some((x) => !x || !PRODUCTS.includes(x))) errors.push("products");
+  f.name = `${f.first} ${f.last}`;
   return { fields: f, errors };
 }
 
@@ -80,6 +102,41 @@ function visitorEmail(f) {
   };
 }
 
+function demoAdminEmail(f) {
+  const rows = [
+    ["Name", f.name], ["Organisation", f.organisation], ["Email", f.email], ["Phone", f.phone || "Not given"],
+    ["Products", f.products.length ? f.products.join(", ") : "Not given"],
+  ];
+  return {
+    from: FROM,
+    to: [TO],
+    reply_to: f.email,
+    subject: `Demo request: ${f.name}, ${f.organisation}`,
+    text: `New demo request from sentinelhq.co.uk\n\n${rows.map(([k, v]) => `${k}: ${v}`).join("\n")}\n\nReply to this email to contact ${f.first} directly.`,
+    html: `<div style="font-family:system-ui,-apple-system,sans-serif;max-width:560px;color:#14201a">
+<h2 style="font-size:18px;margin:0 0 16px">New demo request from sentinelhq.co.uk</h2>
+<table style="border-collapse:collapse;font-size:14px;width:100%">${rows
+      .map(([k, v]) => `<tr><td style="padding:6px 12px 6px 0;color:#59645d;width:140px">${esc(k)}</td><td style="padding:6px 0">${esc(v)}</td></tr>`)
+      .join("")}</table>
+<p style="font-size:13px;color:#59645d;margin-top:20px">Reply to this email to contact ${esc(f.first)} directly.</p></div>`,
+  };
+}
+
+function demoVisitorEmail(f) {
+  return {
+    from: FROM,
+    to: [f.email],
+    reply_to: TO,
+    subject: "Your SentinelHQ demo request",
+    text: `Hi ${f.first},\n\nThanks for asking for a demo of SentinelHQ. We'll reply within one working day to arrange a time that suits you.\n\nIf there's anything you'd like us to cover, just reply to this email.\n\nSentinelHQ\nhello@sentinelhq.co.uk\nhttps://sentinelhq.co.uk`,
+    html: `<div style="font-family:system-ui,-apple-system,sans-serif;max-width:560px;color:#14201a;font-size:15px;line-height:1.55">
+<p>Hi ${esc(f.first)},</p>
+<p>Thanks for asking for a demo of SentinelHQ. We'll reply within one working day to arrange a time that suits you.</p>
+<p>If there's anything you'd like us to cover, just reply to this email.</p>
+<p style="margin-top:24px">SentinelHQ<br><a href="mailto:hello@sentinelhq.co.uk" style="color:#1f6b45">hello@sentinelhq.co.uk</a><br><a href="https://sentinelhq.co.uk" style="color:#1f6b45">sentinelhq.co.uk</a></p></div>`,
+  };
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -92,9 +149,10 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
-  const { fields, errors } = validate(body);
+  const isDemo = body.type === "demo";
+  const { fields, errors } = isDemo ? validateDemo(body) : validate(body);
   if (errors.length) {
-    return res.status(400).json({ error: "Please check your details and chosen time.", fields: errors });
+    return res.status(400).json({ error: isDemo ? "Please check your details." : "Please check your details and chosen time.", fields: errors });
   }
   if (!process.env.RESEND_API_KEY) {
     console.error("[book] RESEND_API_KEY is not set");
@@ -102,13 +160,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    await send(adminEmail(fields));
+    await send(isDemo ? demoAdminEmail(fields) : adminEmail(fields));
   } catch (e) {
     console.error("[book] admin email failed:", e.message);
-    return res.status(502).json({ error: "We couldn't send your booking." });
+    return res.status(502).json({ error: isDemo ? "We couldn't send your request." : "We couldn't send your booking." });
   }
   try {
-    await send(visitorEmail(fields));
+    await send(isDemo ? demoVisitorEmail(fields) : visitorEmail(fields));
   } catch (e) {
     // The booking reached us; a failed confirmation shouldn't fail the request.
     console.error("[book] confirmation email failed:", e.message);

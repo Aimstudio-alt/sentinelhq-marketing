@@ -32,10 +32,14 @@ const warnings = [];
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.cpSync("public", OUT, { recursive: true });
 
-const FONTS_CSS = fs.readFileSync(`${SRC}/fonts.css`, "utf8").replace(/\/\*.*?\*\/\n?/gs, "").trim();
+const stripComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\n\s*\n/g, "\n").trim();
+const FONTS_CSS = stripComments(fs.readFileSync(`${SRC}/fonts.css`, "utf8"));
+const SHARED_CSS = stripComments(fs.readFileSync(`${SRC}/shared.css`, "utf8"));
+const PRODUCT_CSS = stripComments(fs.readFileSync(`${SRC}/product-redesign.css`, "utf8"));
+const LEGAL_CSS = stripComments(fs.readFileSync(`${SRC}/legal-redesign.css`, "utf8"));
 
 // ── 1. head ──────────────────────────────────────────────────────────────────
-function headBlock(page, { themeColor = "#f0f2e5", jsonLd }) {
+function headBlock(page, { themeColor = "#0e2219", jsonLd }) {
   const url = SITE_URL + page.path;
   const og = `${SITE_URL}/og-image.png`;
   for (const [k, max] of [["title", 60], ["description", 155]]) {
@@ -67,9 +71,10 @@ function headBlock(page, { themeColor = "#f0f2e5", jsonLd }) {
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preload" href="/fonts/hanken-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
-<style>${FONTS_CSS}</style>
+<link rel="preload" href="/fonts/publicsans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/sourceserif4-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>${FONTS_CSS}
+${SHARED_CSS}</style>
 <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": jsonLd }).replace(/</g, "\\u003c")}</script>`;
 }
 
@@ -121,17 +126,40 @@ async function processImages(html, pageDir) {
   return html;
 }
 
-// ── 3. shared footer for the hand-written pages ─────────────────────────────
-function footerLinks(currentPath) {
-  const links = [`<a href="/">All products</a>`];
-  for (const [name, href, ext] of FOOTER_PRODUCTS) {
-    if (href === currentPath) continue;
-    links.push(ext ? `<a href="${href}" target="_blank" rel="noopener noreferrer">${name}</a>` : `<a href="${href}">${name}</a>`);
-  }
-  links.push(`<a href="/legal.html">Legal</a>`, `<a href="${LINKEDIN}" target="_blank" rel="noopener noreferrer">LinkedIn</a>`, `<a href="mailto:hello@sentinelhq.co.uk">Contact</a>`);
-  return `<div class="foot-links">\n        ${links.join("\n        ")}\n      </div>`;
+// ── 3. shared nav + footer (every page) ─────────────────────────────────────
+const SHIELD = (size) => `<svg viewBox="0 0 28 28" width="${size}" height="${size}" fill="none" aria-hidden="true"><path d="M14 2.5l9.5 3.4v6.6c0 5.9-3.7 10.4-9.5 13-5.8-2.6-9.5-7.1-9.5-13V5.9z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9.6 13.4l3 3 5.8-6.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const HOME_LINKS = [["How it works", "#how"], ["Products", "#products"], ["Customers", "#customers"], ["About", "#about"]];
+
+function navHTML({ links, cta, sub = "", skip = false }) {
+  const [label, href, ext] = cta;
+  const extAttr = ext ? ' target="_blank" rel="noopener"' : "";
+  return `${skip ? '<a class="sh-skip" href="#main">Skip to content</a>\n' : ""}<nav class="sh-top" aria-label="Main"><div class="sh-w">
+ <a class="sh-brand" href="/">${SHIELD(30)}<span><b>Sentinel</b>HQ</span>${sub ? `<small>${sub}</small>` : ""}</a>
+ <ul class="sh-links">${links.map(([t, h]) => `<li><a href="${h}">${t}</a></li>`).join("")}</ul>
+ <div class="sh-nr"><a class="sh-btn sh-btn-p" href="${href}"${extAttr}>${label}</a></div>
+</div></nav>`;
 }
-const FOOT_LEGAL = `<div class="foot-legal">© 2026 ${escText(REGISTERED_OFFICE)} Built in North East England · Hosted in the UK.</div>`;
+
+const LEGAL_LINE = `© 2026 ${escText(REGISTERED_OFFICE)} UK hosted · Built in North East England.`;
+function footerHTML() {
+  const prods = FOOTER_PRODUCTS.map(([n, h, ext]) => `<li><a href="${h}"${ext ? ' target="_blank" rel="noopener"' : ""}>${n}${ext ? " ↗" : ""}</a></li>`).join("");
+  return `<footer class="sh-foot"><div class="sh-w">
+ <div><a class="sh-brand" href="/">${SHIELD(26)}<span><b>Sentinel</b>HQ</span></a><p>Compliance and safeguarding software for golf clubs, county unions, junior sport, recruitment agencies and care homes.</p><p><a href="mailto:hello@sentinelhq.co.uk">hello@sentinelhq.co.uk</a><br><a href="${LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a></p></div>
+ <div><h2>Products</h2><ul>${prods}</ul></div>
+ <div><h2>Trust</h2><ul><li><a href="/legal.html#privacy">Privacy</a></li><li><a href="/legal.html#security">Security</a></li><li><a href="/legal.html#terms">Terms</a></li><li><a href="/legal.html#dpa">DPA</a></li></ul></div>
+ <p class="sh-legal">${LEGAL_LINE}</p>
+</div></footer>`;
+}
+
+// Product page nav: keep the page's own in-page links and its call to action.
+function productNav(html, name) {
+  const mid = (html.match(/<nav class="nav-mid">([\s\S]*?)<\/nav>/) || [])[1] || "";
+  const links = [...mid.matchAll(/<a href="([^"]+)">([^<]+)<\/a>/g)].map(([, h, t]) => [t, h]);
+  const right = (html.match(/<div class="nav-right">([\s\S]*?)<\/div>/) || [])[1] || "";
+  const c = right.match(/<a class="btn btn-primary" href="([^"]+)">([^<]+)<\/a>/);
+  const cta = c ? [c[2].trim(), c[1], /^https?:/.test(c[1])] : ["Book a call", "/#book", false];
+  return navHTML({ links, cta, sub: name, skip: true });
+}
 
 // Make in-page links to this site root-relative. Body only: canonical and
 // og:url in the head must stay absolute.
@@ -144,19 +172,26 @@ function absolutiseSiteLinks(html) {
 for (const page of PAGES.filter((p) => p.src !== "home")) {
   let html = fs.readFileSync(path.join(SRC, page.src), "utf8");
   const pageDir = path.dirname(page.src) === "." ? "" : path.dirname(page.src);
-  const theme = (html.match(/<meta name="theme-color" content="([^"]+)"/) || [])[1];
-
+  
   const [, head] = html.match(/<head>([\s\S]*?)<\/head>/);
   let rest = head;
   for (const re of STRIP_HEAD) rest = rest.replace(re, "");
   const faq = faqSchema(html, page.path);
   const jsonLd = page.schema(faq).filter(Boolean);
-  html = html.replace(head, `\n${headBlock(page, { themeColor: theme, jsonLd })}\n${rest.trim()}\n`);
+  html = html.replace(head, `\n${headBlock(page, { jsonLd })}\n${rest.trim()}\n`);
   html = html.replace(/<html lang="en">/, '<html lang="en-GB">');
 
   if (pageDir) {
-    html = html.replace(/<div class="foot-links">[\s\S]*?<\/div>/, footerLinks(page.path));
-    html = html.replace(/<div class="foot-legal">[\s\S]*?<\/div>/, FOOT_LEGAL);
+    const name = page.title.split(" | ")[0];
+    html = html.replace(/<header class="nav">[\s\S]*?<\/header>/, productNav(html, name) + '\n<main id="main">');
+    html = html.replace(/<footer class="foot">[\s\S]*?<\/footer>/, '</main>\n' + footerHTML());
+    const accent = { clubsentinel: "#c99418", countyconsent: "#1f6b45", referencesentinel: "#3667cf", caresentinel: "#2b8a8a" }[pageDir];
+    html = html.replace("</head>", `<style>${PRODUCT_CSS}\n:root{--accent:${accent};--pc:${accent}}</style>\n</head>`);
+  } else {
+    html = html.replace("<body>", `<body>\n${navHTML({ links: HOME_LINKS.map(([t, h]) => [t, "/" + h]), cta: ["Book a call", "/#book"] })}`);
+    const i = html.lastIndexOf("<script>");
+    html = html.slice(0, i) + footerHTML() + "\n\n" + html.slice(i);
+    html = html.replace("</head>", `<style>${LEGAL_CSS}</style>\n</head>`);
   }
   html = absolutiseSiteLinks(html);
   html = await processImages(html, pageDir);
@@ -179,10 +214,9 @@ for (const page of PAGES.filter((p) => p.src !== "home")) {
     bundle: true, platform: "node", format: "esm", outfile: ssrFile,
     external: ["react", "react-dom"], logLevel: "warning",
   });
-  const { render } = await import(pathToFileURL(path.resolve(ssrFile)).href + `?t=${Date.now()}`);
-  const body = render();
+  const { renderDemo, renderBooking } = await import(pathToFileURL(path.resolve(ssrFile)).href + `?t=${Date.now()}`);
 
-  // client island (Preact via the React compat layer)
+  // client islands (Preact via the React compat layer)
   const client = await esbuild.build({
     entryPoints: ["src/home/client.jsx"],
     bundle: true, minify: true, format: "esm", target: "es2019", write: false,
@@ -194,20 +228,20 @@ for (const page of PAGES.filter((p) => p.src !== "home")) {
   fs.mkdirSync(path.join(OUT, "assets"), { recursive: true });
   fs.writeFileSync(path.join(OUT, "assets", `home-${hash}.js`), js);
 
-  const css = fs.readFileSync("src/home/styles.css", "utf8");
+  const body = fs.readFileSync("src/home/index.html", "utf8")
+    .replace("<!--#nav-->", navHTML({ links: HOME_LINKS, cta: ["Book a call", "#book"], skip: true }))
+    .replace("<!--#footer-->", footerHTML())
+    .replace("<!--#demo-->", renderDemo())
+    .replace("<!--#booking-->", renderBooking());
+  const css = stripComments(fs.readFileSync("src/home/home.css", "utf8"));
   const html = `<!DOCTYPE html>
 <html lang="en-GB">
 <head>
-${headBlock(page, { themeColor: "#f0f2e5", jsonLd: page.schema() })}
-<style>
-html, body { margin: 0; padding: 0; background: #f0f2e5; }
-body { font-family: 'Hanken Grotesk', system-ui, sans-serif; }
-a { color: inherit; }
-${css}
-</style>
+${headBlock(page, { jsonLd: page.schema() })}
+<style>${css}</style>
 </head>
 <body>
-<div id="root">${body}</div>
+${body}
 <script type="module" src="/assets/home-${hash}.js"></script>
 </body>
 </html>
@@ -229,6 +263,9 @@ for (const f of fs.readdirSync(OUT, { recursive: true }).filter((f) => String(f)
   if (h1 !== 1) warnings.push(`${f}: ${h1} <h1> elements`);
   if (/text\/babel/.test(html)) warnings.push(`${f}: still contains text/babel`);
   if (/\[PLACEHOLDER/.test(html)) warnings.push(`${f}: contains a [PLACEHOLDER] (Ray Tatters testimonial)`);
+  const text = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<[^>]+>/g, " ");
+  const dashes = (text.match(/\u2014/g) || []).length;
+  if (dashes) warnings.push(`${f}: ${dashes} em dash(es) in visible text`);
   const kb = (Buffer.byteLength(html) / 1024).toFixed(0);
   console.log(`  ${f.padEnd(32)} ${kb} KB`);
 }

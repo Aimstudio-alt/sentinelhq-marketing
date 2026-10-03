@@ -1,0 +1,39 @@
+/* SentinelHQ design system: tokens, base, buttons, nav, footer. Shared by every page. */
+:root{--light:#f7f7f2;--light-2:#eeefe6;--white:#fff;--dark:#0e2219;--dark-2:#163327;--ink:#14201a;--ink-2:#3a463f;--muted:#59645d;--line:#dfe1d6;--line-d:rgba(255,255,255,.12);--green:#1f6b45;--green-h:#18573a;--fair:#8fd0a8;--gold:#d6a63a;--on-d:#eef1e8;--on-d-2:#b9c4bb;--ok-bg:#e2f1e7;--ok:#1d6a43;--due-bg:#fbf0d0;--due:#6b4e00;--bad-bg:#fbe3e0;--bad:#9b2c22;--c-club:#c99418;--c-county:#1f6b45;--c-sport:#6d55d6;--c-ref:#3667cf;--c-care:#2b8a8a;--serif:"Source Serif 4",Georgia,serif;--sans:"Public Sans",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--light);color:var(--ink);font:400 17px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+em,i{font-style:normal}
+:focus-visible{outline:3px solid #d6a63a;outline-offset:3px;border-radius:6px}
+.sh-w{max-width:1200px;margin:0 auto;padding:0 40px}
+.sh-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 24px;border-radius:8px;font:600 16px/1 var(--sans);text-decoration:none;border:1.5px solid transparent;white-space:nowrap;cursor:pointer}
+.sh-btn-p{background:#1f6b45;color:#fff}.sh-btn-p:hover{background:#18573a}
+.sh-skip{position:absolute;left:-9999px;top:8px;z-index:100;background:#fff;color:var(--ink);padding:10px 14px;border-radius:8px;font-weight:600}
+.sh-skip:focus{left:12px}
+
+/* nav */
+nav.sh-top{background:var(--dark);border-bottom:1px solid var(--line-d)}
+nav.sh-top .sh-w{display:flex;align-items:center;justify-content:space-between;height:76px;gap:24px}
+.sh-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font:500 21px/1 var(--sans);letter-spacing:-.02em}
+.sh-brand b{font-weight:700}
+.sh-brand small{font:500 13px/1 var(--sans);color:var(--on-d-2);letter-spacing:0;margin-left:4px}
+.sh-links{display:flex;gap:30px;list-style:none;margin:0;padding:0;font-weight:500;font-size:15.5px}
+.sh-links a{color:var(--on-d-2);text-decoration:none}.sh-links a:hover{color:#fff}
+.sh-nr{display:flex;align-items:center;gap:18px}
+
+/* footer */
+footer.sh-foot{background:#0a1912;color:var(--on-d-2);padding:56px 0 40px;font-size:15px;line-height:1.6}
+footer.sh-foot .sh-w{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+footer.sh-foot h2{font:700 12px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:#a5b1a8;margin:0 0 14px}
+footer.sh-foot p{margin:14px 0 0;max-width:40ch}
+footer.sh-foot ul{list-style:none;display:grid;gap:9px;margin:0;padding:0}
+footer.sh-foot a{color:var(--on-d);text-decoration:none}footer.sh-foot a:hover{text-decoration:underline}
+footer.sh-foot .sh-brand{font-size:21px}
+.sh-legal{grid-column:1/-1;border-top:1px solid var(--line-d);padding-top:22px;margin-top:30px!important;max-width:none!important;font-size:14px;line-height:1.7}
+
+@media(max-width:1180px){.sh-links{display:none}}
+@media(max-width:860px){
+ .sh-w{padding:0 20px}nav.sh-top .sh-w{height:66px}.sh-nr .sh-btn{min-height:44px;padding:0 16px;font-size:15px}
+ .sh-brand small{display:none}
+ footer.sh-foot .sh-w{grid-template-columns:1fr}
+}

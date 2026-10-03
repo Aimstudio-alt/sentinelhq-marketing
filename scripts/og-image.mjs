@@ -14,8 +14,8 @@ const products = [
 ];
 
 const html = `<!doctype html><html><head><style>
-@font-face{font-family:N;src:${font("newsreader-latin.woff2")};font-weight:200 800}
-@font-face{font-family:H;src:${font("hanken-latin.woff2")};font-weight:100 900}
+@font-face{font-family:N;src:${font("sourceserif4-latin.woff2")};font-weight:200 800}
+@font-face{font-family:H;src:${font("publicsans-latin.woff2")};font-weight:100 900}
 *{box-sizing:border-box;margin:0}
 body{width:1200px;height:630px;background:#f0f2e5;font-family:H;color:#1b1a16;position:relative;overflow:hidden}
 .logo{position:absolute;left:80px;top:62px;display:flex;align-items:center;gap:20px;font:700 34px H}
