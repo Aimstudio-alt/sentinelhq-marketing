@@ -21,4 +21,4 @@ h2,.h2{line-height:1.1}
 /* accessibility: gold buttons use dark ink (WCAG AA), links in running text are underlined */
 .btn-gold{background:#d6a63a;color:#14201a}
 .btn-gold:hover{background:#c8972c;color:#14201a}
-p a:not(.btn),li a:not(.btn){text-decoration:underline;text-underline-offset:2px}
+p a:not(.btn),li a:not(.btn),.groupnote a,.note a{text-decoration:underline;text-underline-offset:2px}
