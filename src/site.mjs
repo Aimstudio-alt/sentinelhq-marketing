@@ -2,7 +2,7 @@
 // Used by the homepage components and by build.mjs for every page.
 
 export const SITE_URL = "https://sentinelhq.co.uk";
-export const LASTMOD = "2026-10-02";
+export const LASTMOD = "2026-10-04";
 
 export const LINKEDIN = "https://www.linkedin.com/company/sentinelhq-uk/";
 
