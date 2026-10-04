@@ -30,10 +30,34 @@ export function validate(body) {
   if (!PHONE_RE.test(f.phone)) errors.push("phone");
   if (!f.organisation || f.organisation.length > 150) errors.push("organisation");
   if (!PRODUCTS.includes(f.product)) errors.push("product");
-  const when = new Date(f.slotIso);
-  const now = Date.now();
-  if (!f.slot || f.slot.length > 80 || isNaN(when) || when < now || when - now > 120 * 864e5) errors.push("slot");
-  return { fields: f, errors };
+  const slotError = checkSlot(f.slot, f.slotIso);
+  if (slotError) errors.push("slot");
+  return { fields: f, errors, slotError };
+}
+
+// Calls run Monday to Friday, on the hour from 10:00 to 16:00 UK time, up to 120 days ahead.
+const SLOT_MESSAGES = {
+  missing: "Please pick a date and time for your call.",
+  past: "That time has already passed. Please pick another date and time.",
+  far: "Please pick a date within the next four months.",
+  weekend: "Calls run Monday to Friday. Please pick a weekday.",
+  hours: "Calls run between 10am and 4pm UK time. Please pick another time.",
+};
+const londonParts = (date) => Object.fromEntries(
+  new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", weekday: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+    .formatToParts(date).map((p) => [p.type, p.value])
+);
+
+export function checkSlot(slot, slotIso, now = Date.now()) {
+  const when = new Date(slotIso);
+  if (!slot || slot.length > 80 || !slotIso || isNaN(when)) return SLOT_MESSAGES.missing;
+  if (when <= now) return SLOT_MESSAGES.past;
+  if (when - now > 120 * 864e5) return SLOT_MESSAGES.far;
+  const p = londonParts(when);
+  if (p.weekday === "Sat" || p.weekday === "Sun") return SLOT_MESSAGES.weekend;
+  const h = Number(p.hour), m = Number(p.minute);
+  if (m !== 0 || h < 10 || h > 16) return SLOT_MESSAGES.hours;
+  return "";
 }
 
 export function validateDemo(body) {
@@ -150,9 +174,10 @@ export default async function handler(req, res) {
   }
 
   const isDemo = body.type === "demo";
-  const { fields, errors } = isDemo ? validateDemo(body) : validate(body);
+  const { fields, errors, slotError } = isDemo ? validateDemo(body) : validate(body);
   if (errors.length) {
-    return res.status(400).json({ error: isDemo ? "Please check your details." : "Please check your details and chosen time.", fields: errors });
+    const error = isDemo ? "Please check your details." : slotError || "Please check your name, email, phone and organisation.";
+    return res.status(400).json({ error, fields: errors });
   }
   if (!process.env.RESEND_API_KEY) {
     console.error("[book] RESEND_API_KEY is not set");
