@@ -1,4 +1,4 @@
-// client.jsx — the only JavaScript the homepage ships: the demo form and the
+// client.jsx: the only JavaScript the homepage ships: the demo form and the
 // booking calendar. Everything else is static HTML.
 import React from "react";
 import { render } from "react-dom";

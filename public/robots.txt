@@ -1,4 +1,4 @@
-# robots.txt — sentinelhq.co.uk
+# robots.txt for sentinelhq.co.uk
 User-agent: *
 Allow: /
 

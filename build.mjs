@@ -1,4 +1,4 @@
-// build.mjs — static build for sentinelhq.co.uk.
+// build.mjs: static build for sentinelhq.co.uk.
 //
 //   src/home/*.jsx        homepage, pre-rendered to HTML with React SSR; the booking
 //                         calendar ships as a small Preact island (assets/home-*.js)

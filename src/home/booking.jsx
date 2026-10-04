@@ -1,4 +1,4 @@
-// booking.jsx — "Book a call": calendar + slots on the left, details form on the right.
+// booking.jsx: "Book a call": calendar + slots on the left, details form on the right.
 // Slots are generated client-side in UK time (weekdays, on the hour 10:00 to 16:00), whatever
 // the visitor's own timezone. Posts to /api/book/ (type: booking), which enforces the same rules.
 import React from "react";

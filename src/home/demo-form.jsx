@@ -1,4 +1,4 @@
-// demo-form.jsx — hero "Request a demo" form. Posts to /api/book/ (type: demo).
+// demo-form.jsx: hero "Request a demo" form. Posts to /api/book/ (type: demo).
 import React from "react";
 
 export const PRODUCT_OPTIONS = ["ClubSentinel", "CountyConsent", "SportConsent", "ReferenceSentinel", "CareSentinel", "Not sure yet"];
