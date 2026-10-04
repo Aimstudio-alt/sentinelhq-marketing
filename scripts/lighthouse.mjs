@@ -13,7 +13,7 @@ const base = args[0].replace(/\/$/, "");
 const opt = (k) => { const i = args.indexOf(k); return i > -1 ? args[i + 1] : undefined; };
 const cookie = opt("--cookie");
 const map = opt("--map");
-const pages = (opt("--pages") || "/,/clubsentinel/,/countyconsent/,/referencesentinel/,/caresentinel/,/legal.html").split(",");
+const pages = (opt("--pages") || "/,/legal.html").split(",");
 
 const chromeFlags = ["--headless=new", "--no-sandbox"];
 if (map) chromeFlags.push(`--host-resolver-rules=MAP ${new URL(base).hostname} ${map}`, "--ignore-certificate-errors");

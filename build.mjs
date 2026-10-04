@@ -35,7 +35,6 @@ fs.cpSync("public", OUT, { recursive: true });
 const stripComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\n\s*\n/g, "\n").trim();
 const FONTS_CSS = stripComments(fs.readFileSync(`${SRC}/fonts.css`, "utf8"));
 const SHARED_CSS = stripComments(fs.readFileSync(`${SRC}/shared.css`, "utf8"));
-const PRODUCT_CSS = stripComments(fs.readFileSync(`${SRC}/product-redesign.css`, "utf8"));
 const LEGAL_CSS = stripComments(fs.readFileSync(`${SRC}/legal-redesign.css`, "utf8"));
 
 // ── 1. head ──────────────────────────────────────────────────────────────────
@@ -151,16 +150,6 @@ function footerHTML() {
 </div></footer>`;
 }
 
-// Product page nav: keep the page's own in-page links and its call to action.
-function productNav(html, name) {
-  const mid = (html.match(/<nav class="nav-mid">([\s\S]*?)<\/nav>/) || [])[1] || "";
-  const links = [...mid.matchAll(/<a href="([^"]+)">([^<]+)<\/a>/g)].map(([, h, t]) => [t, h]);
-  const right = (html.match(/<div class="nav-right">([\s\S]*?)<\/div>/) || [])[1] || "";
-  const c = right.match(/<a class="btn btn-primary" href="([^"]+)">([^<]+)<\/a>/);
-  const cta = c ? [c[2].trim(), c[1], /^https?:/.test(c[1])] : ["Book a call", "/#book", false];
-  return navHTML({ links, cta, sub: name, skip: true });
-}
-
 // Make in-page links to this site root-relative. Body only: canonical and
 // og:url in the head must stay absolute.
 function absolutiseSiteLinks(html) {
@@ -172,7 +161,6 @@ function absolutiseSiteLinks(html) {
 for (const page of PAGES.filter((p) => p.src !== "home")) {
   let html = fs.readFileSync(path.join(SRC, page.src), "utf8");
   const pageDir = path.dirname(page.src) === "." ? "" : path.dirname(page.src);
-  
   const [, head] = html.match(/<head>([\s\S]*?)<\/head>/);
   let rest = head;
   for (const re of STRIP_HEAD) rest = rest.replace(re, "");
@@ -181,13 +169,8 @@ for (const page of PAGES.filter((p) => p.src !== "home")) {
   html = html.replace(head, `\n${headBlock(page, { jsonLd })}\n${rest.trim()}\n`);
   html = html.replace(/<html lang="en">/, '<html lang="en-GB">');
 
-  if (pageDir) {
-    const name = page.title.split(" | ")[0];
-    html = html.replace(/<header class="nav">[\s\S]*?<\/header>/, productNav(html, name) + '\n<main id="main">');
-    html = html.replace(/<footer class="foot">[\s\S]*?<\/footer>/, '</main>\n' + footerHTML());
-    const accent = { clubsentinel: "#c99418", countyconsent: "#1f6b45", referencesentinel: "#3667cf", caresentinel: "#2b8a8a" }[pageDir];
-    html = html.replace("</head>", `<style>${PRODUCT_CSS}\n:root{--accent:${accent};--pc:${accent}}</style>\n</head>`);
-  } else {
+  // legal.html: shared nav and footer plus its redesign layer
+  {
     html = html.replace("<body>", `<body>\n${navHTML({ links: HOME_LINKS.map(([t, h]) => [t, "/" + h]), cta: ["Book a call", "/#book"] })}`);
     const i = html.lastIndexOf("<script>");
     html = html.slice(0, i) + footerHTML() + "\n\n" + html.slice(i);
@@ -200,6 +183,17 @@ for (const page of PAGES.filter((p) => p.src !== "home")) {
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, html);
 }
+
+// Scroll-triggered motion from the design reference: How it works plays once .steps is in view;
+// each product card plays when its record card is 60% visible (clear of the bottom 25%) and
+// resets only once fully off screen (one observer to play, one to reset).
+const HOME_MOTION_JS = `(function(){var s=document.querySelector('.steps');if(!s)return;if(!('IntersectionObserver' in window)){s.classList.add('in');return}
+var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){s.classList.add('in');o.disconnect()}},{threshold:.2});o.observe(s)})();
+(function(){var us=document.querySelectorAll('.prod .ui');function on(u,v){u.closest('.prod').classList.toggle('in',v)}
+if(!('IntersectionObserver' in window)){us.forEach(function(u){on(u,true)});return}
+var play=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)on(e.target,true)})},{rootMargin:'0px 0px -25% 0px',threshold:.6});
+var reset=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)on(e.target,false)})},{threshold:0});
+us.forEach(function(u){play.observe(u);reset.observe(u)})})();`;
 
 // ── 5. homepage: SSR + client island ─────────────────────────────────────────
 {
@@ -237,11 +231,13 @@ for (const page of PAGES.filter((p) => p.src !== "home")) {
   const html = `<!DOCTYPE html>
 <html lang="en-GB">
 <head>
+<script>document.documentElement.classList.add("js")</script>
 ${headBlock(page, { jsonLd: page.schema() })}
 <style>${css}</style>
 </head>
 <body>
 ${body}
+<script>${HOME_MOTION_JS}</script>
 <script type="module" src="/assets/home-${hash}.js"></script>
 </body>
 </html>

@@ -9,13 +9,14 @@ export const LINKEDIN = "https://www.linkedin.com/company/sentinelhq-uk/";
 export const REGISTERED_OFFICE =
   "SentinelHQ Limited, 32 Thornbridge, Washington, NE38 8TJ. Registered in England & Wales No. 17242389. ICO ZC175485.";
 
-// [name, href, external?]: internal SentinelHQ page where one exists, else the product site.
+// [name, href, external?]: each product links to its own website (the old
+// /clubsentinel/-style pages on this site 301 to these, see vercel.json).
 export const FOOTER_PRODUCTS = [
-  ["ClubSentinel", "/clubsentinel/", false],
-  ["CountyConsent", "/countyconsent/", false],
+  ["ClubSentinel", "https://clubsentinel.co.uk", true],
+  ["CountyConsent", "https://countyconsent.co.uk", true],
   ["SportConsent", "https://sportconsent.co.uk", true],
-  ["ReferenceSentinel", "/referencesentinel/", false],
-  ["CareSentinel", "/caresentinel/", false],
+  ["ReferenceSentinel", "https://referencesentinel.co.uk", true],
+  ["CareSentinel", "https://caresentinel.uk", true],
 ];
 
 const ORG_ID = `${SITE_URL}/#organization`;
@@ -67,19 +68,17 @@ const monthly = (price, name, extra = {}) => ({
 
 export const APPS = {
   club: app({
-    "@id": `${SITE_URL}/clubsentinel/#software`,
+    "@id": "https://clubsentinel.co.uk/#software",
     name: "ClubSentinel",
-    url: `${SITE_URL}/clubsentinel/`,
-    sameAs: ["https://clubsentinel.co.uk"],
+    url: "https://clubsentinel.co.uk",
     description:
       "Health and safety compliance software for UK golf clubs: voice-driven records, AI Safety Data Sheet extraction, RIDDOR, COSHH, training, greenkeeping records and a live compliance score.",
     offers: monthly(199, "ClubSentinel, per club"),
   }),
   county: app({
-    "@id": `${SITE_URL}/countyconsent/#software`,
+    "@id": "https://countyconsent.co.uk/#software",
     name: "CountyConsent",
-    url: `${SITE_URL}/countyconsent/`,
-    sameAs: ["https://countyconsent.co.uk"],
+    url: "https://countyconsent.co.uk",
     description:
       "Digital parental consent and junior safeguarding software for UK golf clubs and county golf unions: consent, medical and emergency details, audit trail and turning-18 alerts.",
     offers: [monthly(65, "Golf Club"), monthly(199, "County Union")],
@@ -93,18 +92,16 @@ export const APPS = {
     offers: monthly(65, "SportConsent club plan"),
   }),
   reference: app({
-    "@id": `${SITE_URL}/referencesentinel/#software`,
+    "@id": "https://referencesentinel.co.uk/#software",
     name: "ReferenceSentinel",
-    url: `${SITE_URL}/referencesentinel/`,
-    sameAs: ["https://referencesentinel.co.uk"],
+    url: "https://referencesentinel.co.uk",
     description:
       "Employment reference checking and workforce compliance software for UK recruitment agencies: AI fraud detection, automated referee chasing, Right to Work and DBS tracking.",
   }),
   care: app({
-    "@id": `${SITE_URL}/caresentinel/#software`,
+    "@id": "https://caresentinel.uk/#software",
     name: "CareSentinel",
-    url: `${SITE_URL}/caresentinel/`,
-    sameAs: ["https://caresentinel.uk"],
+    url: "https://caresentinel.uk",
     description:
       "Voice-first CQC compliance software for UK care homes: speak an incident and AI writes the record, with RIDDOR flags, COSHH, audits and a live compliance score.",
     offers: {
@@ -134,6 +131,7 @@ export const APPS = {
   }),
 };
 
+
 const crumb = (name, path) => ({
   "@type": "BreadcrumbList",
   itemListElement: [
@@ -156,42 +154,6 @@ export const PAGES = [
       { "@type": "WebSite", "@id": `${SITE_URL}/#website`, url: `${SITE_URL}/`, name: "SentinelHQ", publisher, inLanguage: "en-GB" },
       APPS.club, APPS.county, APPS.sport, APPS.reference, APPS.care,
     ],
-  },
-  {
-    src: "clubsentinel/index.html",
-    path: "/clubsentinel/",
-    title: "ClubSentinel | Golf Club Health & Safety Software UK",
-    description:
-      "Health and safety software for UK golf clubs. Voice records, AI COSHH data sheet reading, RIDDOR and a live compliance score. £199 a month per club.",
-    ogAlt: "ClubSentinel: health and safety software for UK golf clubs",
-    schema: (faq) => [ORGANIZATION, APPS.club, faq, crumb("ClubSentinel", "/clubsentinel/")],
-  },
-  {
-    src: "countyconsent/index.html",
-    path: "/countyconsent/",
-    title: "CountyConsent | Junior Golf Consent Software UK",
-    description:
-      "Digital parental consent and safeguarding for UK golf clubs and county unions. Medical alerts, audit trail, turning-18 alerts. From £65 a month.",
-    ogAlt: "CountyConsent: junior golf consent and safeguarding software",
-    schema: (faq) => [ORGANIZATION, APPS.county, faq, crumb("CountyConsent", "/countyconsent/")],
-  },
-  {
-    src: "referencesentinel/index.html",
-    path: "/referencesentinel/",
-    title: "ReferenceSentinel | Reference Checking Software UK",
-    description:
-      "Reference checking and workforce compliance for UK recruitment agencies. AI fraud checks, automated chasing, RTW and DBS tracking. Book a demo.",
-    ogAlt: "ReferenceSentinel: reference checking software for UK recruitment agencies",
-    schema: (faq) => [ORGANIZATION, APPS.reference, faq, crumb("ReferenceSentinel", "/referencesentinel/")],
-  },
-  {
-    src: "caresentinel/index.html",
-    path: "/caresentinel/",
-    title: "CareSentinel | Care Home Compliance Software UK",
-    description:
-      "Voice-first CQC compliance software for UK care homes. Speak it and AI writes the record. RIDDOR flags, COSHH, audits. From £6 per bed a month.",
-    ogAlt: "CareSentinel: CQC compliance software for UK care homes",
-    schema: (faq) => [ORGANIZATION, APPS.care, faq, crumb("CareSentinel", "/caresentinel/")],
   },
   {
     src: "legal.html",

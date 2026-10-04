@@ -12,6 +12,66 @@
   },
   "redirects": [
     {
+      "source": "/clubsentinel",
+      "destination": "https://clubsentinel.co.uk",
+      "statusCode": 301
+    },
+    {
+      "source": "/clubsentinel/",
+      "destination": "https://clubsentinel.co.uk",
+      "statusCode": 301
+    },
+    {
+      "source": "/clubsentinel/:path*",
+      "destination": "https://clubsentinel.co.uk",
+      "statusCode": 301
+    },
+    {
+      "source": "/countyconsent",
+      "destination": "https://countyconsent.co.uk",
+      "statusCode": 301
+    },
+    {
+      "source": "/countyconsent/",
+      "destination": "https://countyconsent.co.uk",
+      "statusCode": 301
+    },
+    {
+      "source": "/countyconsent/:path*",
+      "destination": "https://countyconsent.co.uk",
+      "statusCode": 301
+    },
+    {
+      "source": "/referencesentinel",
+      "destination": "https://referencesentinel.co.uk",
+      "statusCode": 301
+    },
+    {
+      "source": "/referencesentinel/",
+      "destination": "https://referencesentinel.co.uk",
+      "statusCode": 301
+    },
+    {
+      "source": "/referencesentinel/:path*",
+      "destination": "https://referencesentinel.co.uk",
+      "statusCode": 301
+    },
+    {
+      "source": "/caresentinel",
+      "destination": "https://caresentinel.uk",
+      "statusCode": 301
+    },
+    {
+      "source": "/caresentinel/",
+      "destination": "https://caresentinel.uk",
+      "statusCode": 301
+    },
+    {
+      "source": "/caresentinel/:path*",
+      "destination": "https://caresentinel.uk",
+      "statusCode": 301
+    },
+    {
       "source": "/index.html",
       "destination": "/",
       "permanent": true

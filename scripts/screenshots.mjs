@@ -5,7 +5,7 @@ import fs from "node:fs";
 import { chromium } from "playwright";
 
 const [base, outDir = "shots", flag] = process.argv.slice(2);
-const pages = ["/", "/clubsentinel/", "/countyconsent/", "/referencesentinel/", "/caresentinel/", "/legal.html"];
+const pages = ["/", "/legal.html"];
 const sizes = { desktop: { width: 1440, height: 900 }, mobile: { width: 390, height: 844 } };
 fs.mkdirSync(outDir, { recursive: true });
 
