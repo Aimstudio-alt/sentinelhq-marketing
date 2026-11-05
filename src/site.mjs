@@ -2,7 +2,7 @@
 // Used by the homepage components and by build.mjs for every page.
 
 export const SITE_URL = "https://sentinelhq.co.uk";
-export const LASTMOD = "2026-10-04";
+export const LASTMOD = "2026-11-05";
 
 export const LINKEDIN = "https://www.linkedin.com/company/sentinelhq-uk/";
 
@@ -129,6 +129,14 @@ export const APPS = {
       ],
     },
   }),
+  outreach: app({
+    "@id": "https://www.outreachsentinel.co.uk/#software",
+    name: "OutreachSentinel",
+    url: "https://www.outreachsentinel.co.uk/",
+    description:
+      "Sales outreach software for firms that sell into care: every CQC registered care home in England, ready to email from day one. Nothing sends until a person presses Send.",
+    offers: monthly(99, "OutreachSentinel, per company"),
+  }),
 };
 
 
@@ -152,7 +160,7 @@ export const PAGES = [
     schema: () => [
       ORGANIZATION,
       { "@type": "WebSite", "@id": `${SITE_URL}/#website`, url: `${SITE_URL}/`, name: "SentinelHQ", publisher, inLanguage: "en-GB" },
-      APPS.club, APPS.county, APPS.sport, APPS.reference, APPS.care,
+      APPS.club, APPS.county, APPS.sport, APPS.reference, APPS.care, APPS.outreach,
     ],
   },
   {
