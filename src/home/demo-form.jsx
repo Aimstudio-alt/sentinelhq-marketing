@@ -1,7 +1,7 @@
 // demo-form.jsx: hero "Request a demo" form. Posts to /api/book/ (type: demo).
 import React from "react";
 
-export const PRODUCT_OPTIONS = ["ClubSentinel", "CountyConsent", "SportConsent", "ReferenceSentinel", "CareSentinel", "Not sure yet"];
+export const PRODUCT_OPTIONS = ["ClubSentinel", "CountyConsent", "SportConsent", "ReferenceSentinel", "CareSentinel", "OutreachSentinel", "Not sure yet"];
 
 export function DemoForm() {
   const [f, setF] = React.useState({ email: "", first: "", last: "", org: "", phone: "", hp: "" });

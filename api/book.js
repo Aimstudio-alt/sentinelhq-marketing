@@ -7,7 +7,7 @@
 
 const FROM = "SentinelHQ <noreply@sentinelhq.co.uk>";
 const TO = process.env.BOOKING_TO || "hello@sentinelhq.co.uk";
-const PRODUCTS = ["", "ClubSentinel", "CountyConsent", "SportConsent", "ReferenceSentinel", "CareSentinel", "Not sure yet"];
+const PRODUCTS = ["", "ClubSentinel", "CountyConsent", "SportConsent", "ReferenceSentinel", "CareSentinel", "OutreachSentinel", "Not sure yet"];
 const EMAIL_RE = /^[^\s@<>()",;:]+@[^\s@<>()",;:]+\.[a-z]{2,}$/i;
 const PHONE_RE = /^[+()\d\s.-]{7,25}$/;
 
@@ -67,7 +67,7 @@ export function validateDemo(body) {
     last: clean(body.last_name, 60),
     organisation: clean(body.organisation, 150),
     phone: clean(body.phone, 25),
-    products: Array.isArray(body.products) ? body.products.slice(0, 6).map((x) => clean(x, 40)) : [],
+    products: Array.isArray(body.products) ? body.products.slice(0, 7).map((x) => clean(x, 40)) : [],
   };
   const errors = [];
   if (!EMAIL_RE.test(f.email) || f.email.length > 254) errors.push("email");

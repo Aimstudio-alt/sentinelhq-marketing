@@ -17,6 +17,7 @@ export const FOOTER_PRODUCTS = [
   ["SportConsent", "https://sportconsent.co.uk", true],
   ["ReferenceSentinel", "https://referencesentinel.co.uk", true],
   ["CareSentinel", "https://caresentinel.uk", true],
+  ["OutreachSentinel", "https://www.outreachsentinel.co.uk/", true],
 ];
 
 const ORG_ID = `${SITE_URL}/#organization`;
